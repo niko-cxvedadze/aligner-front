@@ -1,16 +1,17 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthLayout } from "./layout/AuthLayout";
 import { SignIn, SignUp, useAuth } from "@clerk/clerk-react";
 
 export default function App() {
-  const { isSignedIn } = useAuth();
+  const { isSignedIn, isLoaded } = useAuth();
 
   return (
     <Routes>
-      {!isSignedIn && (
-        <Route path="/auth/*" element={<AuthLayout />}>
+      {!isSignedIn && isLoaded && (
+        <Route element={<AuthLayout />}>
           <Route path="sign-in" element={<SignIn signUpUrl="sign-up" />} />
           <Route path="sign-up" element={<SignUp signInUrl="sign-in" />} />
+          <Route path="*" element={<Navigate to="/sign-in" />} />
         </Route>
       )}
     </Routes>
