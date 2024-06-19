@@ -5,7 +5,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { ClerkProvider } from "./providers/ClerkProvider.tsx";
 import { ThemeProvider } from "./providers/ThemeProvider.tsx";
-import { GlobalProvider } from "@/providers/GlobalProvider/GlobalProvider.tsx";
+import { GlobalProvider } from "@/providers/GlobalProvider";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
