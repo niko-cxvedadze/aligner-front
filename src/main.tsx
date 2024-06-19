@@ -5,15 +5,18 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { ClerkProvider } from "./providers/ClerkProvider.tsx";
 import { ThemeProvider } from "./providers/ThemeProvider.tsx";
+import { GlobalProvider } from "@/providers/GlobalProvider/GlobalProvider.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <ThemeProvider>
-      <ClerkProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ClerkProvider>
-    </ThemeProvider>
+    <GlobalProvider>
+      <ThemeProvider>
+        <ClerkProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </ClerkProvider>
+      </ThemeProvider>
+    </GlobalProvider>
   </React.StrictMode>
 );
