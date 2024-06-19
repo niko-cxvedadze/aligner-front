@@ -1,3 +1,4 @@
+import { TooltipProvider } from "@/components/ui/tooltip.tsx";
 import { createContext, useContext, useEffect } from "react";
 
 type Theme = "dark" | "light" | "system";
@@ -27,7 +28,7 @@ export function ThemeProvider({
 
   return (
     <ThemeProviderContext.Provider {...props} value={{}}>
-      {children}
+      <TooltipProvider>{children}</TooltipProvider>
     </ThemeProviderContext.Provider>
   );
 }
