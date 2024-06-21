@@ -1,1 +1,5 @@
-export { StaticDataProvider } from "./StaticDataProvider";
+export {
+  StaticDataProvider,
+  getWorkspaces,
+  workspacesOptions,
+} from "./StaticDataProvider";

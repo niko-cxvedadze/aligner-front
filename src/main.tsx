@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { Providers } from "./providers/Providers.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-export const queryClient = new QueryClient({
+const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
