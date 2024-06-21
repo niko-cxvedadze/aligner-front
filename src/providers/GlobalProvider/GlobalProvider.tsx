@@ -1,11 +1,7 @@
 import { PropsWithChildren } from "react";
-import { createStore, Provider as JotaiProvider, atom } from "jotai";
+import { Provider as JotaiProvider } from "jotai";
 
-export const globalStore = createStore();
-export const token = atom<string | null>("kvernebi");
-
-// initial atoms
-// globalStore.set(token, "");
+import { globalStore } from "./GlobalStore";
 
 export function GlobalProvider({ children }: PropsWithChildren) {
   return <JotaiProvider store={globalStore}>{children}</JotaiProvider>;
