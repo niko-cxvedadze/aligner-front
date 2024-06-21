@@ -11,6 +11,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   async function fetchToken() {
     const token = await getToken({ template: "basic-token-v1" });
     setAuthToken(token);
+    console.log("Token fetched: ", token);
     privateAxios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   }
 

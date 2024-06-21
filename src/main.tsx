@@ -2,21 +2,23 @@ import App from "./App.tsx";
 import "@/assets/global.css";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import { ClerkProvider } from "./providers/ClerkProvider.tsx";
-import { ThemeProvider } from "./providers/ThemeProvider.tsx";
-import { GlobalProvider } from "@/providers/GlobalProvider";
-import { AuthProvider } from "./providers/AuthProvider.tsx";
+import { Providers } from "./providers/Providers.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <GlobalProvider>
-    <ThemeProvider>
-      <ClerkProvider>
-        <AuthProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </AuthProvider>
-      </ClerkProvider>
-    </ThemeProvider>
-  </GlobalProvider>
+  <BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <Providers>
+        <App />
+      </Providers>
+    </QueryClientProvider>
+  </BrowserRouter>
 );

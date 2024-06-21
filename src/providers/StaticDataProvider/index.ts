@@ -1,0 +1,1 @@
+export { StaticDataProvider } from "./StaticDataProvider";
