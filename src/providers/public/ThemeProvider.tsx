@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip.tsx";
 
 type Theme = "dark" | "light" | "system";
@@ -15,5 +16,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     root.classList.add("dark");
   }, []);
 
-  return <TooltipProvider>{children}</TooltipProvider>;
+  return (
+    <>
+      <TooltipProvider>{children}</TooltipProvider>
+      <Toaster />
+    </>
+  );
 }
