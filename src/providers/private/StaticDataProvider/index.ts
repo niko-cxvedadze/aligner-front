@@ -2,4 +2,4 @@ export {
   StaticDataProvider,
   getWorkspaces,
   workspacesOptions,
-} from "./StaticDataProvider";
+} from "./StaticDataProvider.tsx";

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { UserButton } from "@clerk/clerk-react";
 import { ToggleGroup } from "@/components/ui/toggle-group.tsx";
-import { workspacesOptions } from "@/providers/StaticDataProvider";
+import { workspacesOptions } from "@/providers/private/StaticDataProvider";
 import { NewWorkspace } from "@/features/ControlPanel/components/NewWorkspace.tsx";
 import { WorkspaceButton } from "@/features/ControlPanel/components/WorkspaceButton.tsx";
 

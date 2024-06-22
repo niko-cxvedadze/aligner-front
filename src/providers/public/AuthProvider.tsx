@@ -1,11 +1,11 @@
-import { useAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { authTokenAtom } from "./GlobalProvider";
 import { useAuth } from "@clerk/clerk-react";
 import { PropsWithChildren, useEffect } from "react";
-import { privateAxios } from "@/utils/privateAxios";
+import { privateAxios } from "@/utils/privateAxios.ts";
 
 export function AuthProvider({ children }: PropsWithChildren) {
-  const [authToken, setAuthToken] = useAtom(authTokenAtom);
+  const setAuthToken = useSetAtom(authTokenAtom);
   const { isLoaded, isSignedIn, getToken } = useAuth();
 
   async function fetchToken() {
@@ -20,10 +20,6 @@ export function AuthProvider({ children }: PropsWithChildren) {
       fetchToken();
     }
   }, [isLoaded, isSignedIn]);
-
-  if (authToken === null) {
-    return <></>;
-  }
 
   return <>{children}</>;
 }

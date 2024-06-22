@@ -6,6 +6,7 @@ import { MainLayout } from "@/layout/MainLayout.tsx";
 
 // views
 import { MainView } from "@/views/MainView";
+import { PrivateProviders } from "@/providers/private/PrivateProviders.tsx";
 
 export default function App() {
   const { isSignedIn, isLoaded } = useAuth();
@@ -20,7 +21,13 @@ export default function App() {
         </Route>
       )}
       {isSignedIn && isLoaded && (
-        <Route element={<MainLayout />}>
+        <Route
+          element={
+            <PrivateProviders>
+              <MainLayout />
+            </PrivateProviders>
+          }
+        >
           <Route path={"/"} element={<MainView />} />
         </Route>
       )}
