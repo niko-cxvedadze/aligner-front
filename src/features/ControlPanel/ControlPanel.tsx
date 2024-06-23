@@ -11,7 +11,10 @@ export function ControlPanel() {
   return (
     <div className="p-3 border-r border-border border-solid flex flex-col justify-between items-center">
       <div className="gap-3 flex flex-col">
-        <ToggleGroup type={"single"} className={"flex flex-col gap-3"}>
+        <ToggleGroup
+          type={"single"}
+          className={`flex flex-col gap-3 ${data?.length === 0 && `hidden`}`}
+        >
           {data?.map((workspace) => {
             return (
               <WorkspaceButton
