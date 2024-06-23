@@ -11,9 +11,9 @@ import { TrashIcon } from "@radix-ui/react-icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { ToggleGroupItem } from "@/components/ui/toggle-group.tsx";
 
-import { AgreeModal } from "@/components/custom/AgreeModal.tsx";
 import { toast } from "@/components/ui/use-toast.ts";
 import { TWorkspace } from "@/@types/api.types.ts";
+import { AgreeModal } from "@/components/custom/AgreeModal.tsx";
 import {
   Tooltip,
   TooltipContent,

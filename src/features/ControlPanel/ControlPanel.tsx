@@ -9,7 +9,7 @@ export function ControlPanel() {
   const { data } = useQuery(workspacesOptions);
 
   return (
-    <div className="p-3 border-r border-border border-solid flex flex-col justify-between items-center">
+    <div className="p-3 border border-border rounded-lg border-solid flex flex-col justify-between items-center">
       <div className="gap-3 flex flex-col">
         <ToggleGroup
           type={"single"}

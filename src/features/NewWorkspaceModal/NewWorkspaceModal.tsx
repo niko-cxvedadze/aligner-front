@@ -25,6 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useMutation } from "@tanstack/react-query";
 import { privateAxios } from "@/utils/privateAxios.ts";
+import { Separator } from "@/components/ui/separator.tsx";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -82,6 +83,7 @@ export function NewWorkspaceModal({
             <DialogHeader>
               <DialogTitle>Create Workspace</DialogTitle>
             </DialogHeader>
+            <Separator />
             <FormField
               control={form.control}
               name="name"
