@@ -14,13 +14,17 @@ import { ToggleGroupItem } from "@/components/ui/toggle-group.tsx";
 import { AgreeModal } from "@/components/custom/AgreeModal.tsx";
 import { toast } from "@/components/ui/use-toast.ts";
 import { TWorkspace } from "@/@types/api.types.ts";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip.tsx";
 
 interface WorkspaceButtonProps {
-  value: string;
-  name: string;
+  workspace: TWorkspace;
 }
 
-export function WorkspaceButton({ name, value }: WorkspaceButtonProps) {
+export function WorkspaceButton({ workspace }: WorkspaceButtonProps) {
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -34,39 +38,52 @@ export function WorkspaceButton({ name, value }: WorkspaceButtonProps) {
       setIsModalOpen(false);
       const workspaces = (
         queryClient.getQueryData(["workspaces"]) as any
-      )?.filter((data: TWorkspace) => data._id !== value);
+      )?.filter((data: TWorkspace) => data._id !== workspace._id);
       queryClient.setQueryData(["workspaces"], workspaces);
+    },
+    onError: () => {
+      toast({
+        description: "Failed to delete workspace",
+        variant: "destructive",
+      });
     },
   });
 
   return (
-    <>
-      <ContextMenu>
-        <ContextMenuTrigger>
-          <ToggleGroupItem
-            value={value}
-            className="w-[45px] h-[45px]"
-            variant="outline"
-          >
-            {name.split("").slice(0, 2).join("").toUpperCase()}
-          </ToggleGroupItem>
-        </ContextMenuTrigger>
-        <ContextMenuContent>
-          <ContextMenuItem
-            className="cursor-pointer text-destructive"
-            onClick={() => setIsModalOpen(true)}
-          >
-            <TrashIcon className="mr-1.5" />
-            Delete
-          </ContextMenuItem>
-        </ContextMenuContent>
-        <AgreeModal
-          open={isModalOpen}
-          title={"Are you sure"}
-          onAgree={() => deleteWorkspace(value)}
-          onOpenChange={(value) => setIsModalOpen(value)}
-        />
-      </ContextMenu>
-    </>
+    <ContextMenu>
+      <ContextMenuTrigger>
+        <Tooltip>
+          <TooltipTrigger>
+            <ToggleGroupItem
+              value={workspace._id}
+              className="w-[45px] h-[45px]"
+              variant="outline"
+            >
+              {workspace.name.split("").slice(0, 2).join("").toUpperCase()}
+            </ToggleGroupItem>
+          </TooltipTrigger>
+          <TooltipContent>{workspace.name}</TooltipContent>
+        </Tooltip>
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem
+          disabled={workspace.default}
+          className="cursor-pointer text-destructive"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <TrashIcon className="mr-1.5" />
+          Delete
+        </ContextMenuItem>
+      </ContextMenuContent>
+      <AgreeModal
+        open={isModalOpen}
+        title={"Are you sure you want to delete this workspace?"}
+        description={
+          "This action cannot be undone. All tasks in this workspace will be deleted."
+        }
+        onAgree={() => deleteWorkspace(workspace._id)}
+        onOpenChange={(value) => setIsModalOpen(value)}
+      />
+    </ContextMenu>
   );
 }

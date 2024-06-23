@@ -3,4 +3,5 @@ export type TWorkspace = {
   name: string;
   ownerId: string;
   tasks: any[];
+  default: boolean;
 };

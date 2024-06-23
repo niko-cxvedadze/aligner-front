@@ -17,11 +17,7 @@ export function ControlPanel() {
         >
           {data?.map((workspace) => {
             return (
-              <WorkspaceButton
-                key={workspace._id}
-                name={workspace.name}
-                value={workspace._id}
-              />
+              <WorkspaceButton key={workspace._id} workspace={workspace} />
             );
           })}
         </ToggleGroup>
