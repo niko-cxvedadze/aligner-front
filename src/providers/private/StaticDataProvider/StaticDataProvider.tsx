@@ -1,6 +1,6 @@
+import { PropsWithChildren, useEffect } from "react";
 import { TWorkspace } from "@/@types/api.types.ts";
 import { privateAxios } from "@/utils/privateAxios.ts";
-import { PropsWithChildren, useEffect } from "react";
 import { useQueryClient, queryOptions } from "@tanstack/react-query";
 
 export const getWorkspaces = (): any =>

@@ -6,6 +6,7 @@ import { MainLayout } from "@/layout/MainLayout.tsx";
 
 // views
 import { MainView } from "@/views/MainView";
+import { NotFound } from "./views/NotFound";
 import { PrivateProviders } from "@/providers/private/PrivateProviders.tsx";
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
           }
         >
           <Route path={"/:workspaceId/*"} element={<MainView />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       )}
     </Routes>
