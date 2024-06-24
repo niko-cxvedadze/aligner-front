@@ -28,7 +28,7 @@ export default function App() {
             </PrivateProviders>
           }
         >
-          <Route path={"/*"} element={<MainView />} />
+          <Route path={"/:workspaceId/*"} element={<MainView />} />
         </Route>
       )}
     </Routes>
