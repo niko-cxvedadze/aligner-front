@@ -12,16 +12,13 @@ type CreateTaskModalProps = {
 
 export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
   return (
-    <Dialog onOpenChange={onOpenChange}>
-      <DialogHeader>
-        <DialogTitle>Create Task</DialogTitle>
-      </DialogHeader>
-      <DialogContent>
-        <div>content</div>
+    <Dialog open={true} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Create Task</DialogTitle>
+        </DialogHeader>
+        <DialogFooter></DialogFooter>
       </DialogContent>
-      <DialogFooter>
-        <button>Close</button>
-      </DialogFooter>
     </Dialog>
   );
 }
