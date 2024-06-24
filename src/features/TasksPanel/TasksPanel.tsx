@@ -1,27 +1,17 @@
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 
 export function TasksPanel() {
   return (
-    <ScrollArea className="h-full">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Priority</TableHead>
-            <TableHead>Created At</TableHead>
-          </TableRow>
-        </TableHeader>
-      </Table>
+    <ScrollArea className="w-full h-full">
+      <div className="w-full flex flex-row justify-between px-3 pt-3">
+        <div className="flex"></div>
+        <div>
+          <Button variant="outline" size="sm">
+            Create Task
+          </Button>
+        </div>
+      </div>
     </ScrollArea>
   );
 }

@@ -1,7 +1,10 @@
 import { Outlet, Routes, Route, useNavigate } from "react-router-dom";
 import { ActionsPanel } from "@/features/ActionsPanel";
 import { ControlPanel } from "@/features/ControlPanel";
-import { NewWorkspaceModal } from "@/features/NewWorkspaceModal";
+
+// modal
+import { CreateTaskModal } from "@/features/Modals/CreateTaskModal";
+import { NewWorkspaceModal } from "@/features/Modals/NewWorkspaceModal";
 
 export function MainLayout() {
   const navigate = useNavigate();
@@ -21,7 +24,17 @@ export function MainLayout() {
         <Route
           path={"/new-workspace"}
           element={
-            <NewWorkspaceModal open={true} onOpenChange={() => navigate("/")} />
+            <NewWorkspaceModal
+              onOpenChange={(value) => !value && navigate("/")}
+            />
+          }
+        />
+        <Route
+          path={"/create-task"}
+          element={
+            <CreateTaskModal
+              onOpenChange={(value) => !value && navigate("/")}
+            />
           }
         />
       </Routes>

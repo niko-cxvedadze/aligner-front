@@ -18,7 +18,7 @@ export function NewWorkspace() {
           <PlusIcon className="w-[20px] h-[20px]" />
         </div>
       </TooltipTrigger>
-      <TooltipContent>new workspace</TooltipContent>
+      <TooltipContent>Create Workspace</TooltipContent>
     </Tooltip>
   );
 }
