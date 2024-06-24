@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { PlusIcon } from "@radix-ui/react-icons";
+import { buttonVariants } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 
 export function TasksPanel() {
@@ -7,9 +9,13 @@ export function TasksPanel() {
       <div className="w-full flex flex-row justify-between px-3 pt-3">
         <div className="flex"></div>
         <div>
-          <Button variant="outline" size="sm">
+          <Link
+            to="create-task"
+            className={buttonVariants({ variant: "outline" })}
+          >
+            <PlusIcon className="mr-1.5" />
             Create Task
-          </Button>
+          </Link>
         </div>
       </div>
     </ScrollArea>
