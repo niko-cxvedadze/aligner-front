@@ -1,15 +1,15 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 import { UserButton } from "@clerk/clerk-react";
+import { useParams, useNavigate } from "react-router-dom";
 import { ToggleGroup } from "@/components/ui/toggle-group.tsx";
-import { workspacesOptions } from "@/providers/private/StaticDataProvider";
 import { NewWorkspace } from "@/features/ControlPanel/components/NewWorkspace.tsx";
 import { WorkspaceButton } from "@/features/ControlPanel/components/WorkspaceButton.tsx";
+
+import { useWorkspaces } from "@/hooks/useWorkspaces";
 
 export function ControlPanel() {
   const navigate = useNavigate();
   const { workspaceId } = useParams();
-  const { data } = useQuery(workspacesOptions);
+  const { data } = useWorkspaces();
 
   return (
     <div className="p-3 border border-border rounded-lg border-solid flex flex-col justify-between items-center">

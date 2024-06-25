@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { workspacesOptions } from "@/providers/private/StaticDataProvider";
+import { useWorkspaces } from "@/hooks/useWorkspaces";
 
 export function NotFound() {
   const navigate = useNavigate();
-  const { data } = useQuery(workspacesOptions);
+  const { data } = useWorkspaces();
 
   useEffect(() => {
     const workspace = data?.find((workspace) => workspace.default);

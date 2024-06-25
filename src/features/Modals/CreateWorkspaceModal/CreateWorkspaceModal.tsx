@@ -33,11 +33,13 @@ const formSchema = z.object({
   }),
 });
 
-type NewWorkspaceModalProps = {
+type CreateWorkspaceModalProps = {
   onOpenChange: (open: boolean) => void;
 };
 
-export function NewWorkspaceModal({ onOpenChange }: NewWorkspaceModalProps) {
+export function CreateWorkspaceModal({
+  onOpenChange,
+}: CreateWorkspaceModalProps) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { mutate: createWorkspace, isPending } = useMutation({

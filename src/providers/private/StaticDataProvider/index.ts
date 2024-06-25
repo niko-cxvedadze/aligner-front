@@ -1,5 +1,1 @@
-export {
-  StaticDataProvider,
-  getWorkspaces,
-  workspacesOptions,
-} from "./StaticDataProvider.tsx";
+export { StaticDataProvider } from "./StaticDataProvider.tsx";

@@ -5,7 +5,7 @@ import { AuthLayout } from "./layout/AuthLayout";
 import { MainLayout } from "@/layout/MainLayout.tsx";
 
 // views
-import { MainView } from "@/views/MainView";
+import { WorkspaceView } from "@/views/WorkspaceView";
 import { NotFound } from "./views/NotFound";
 import { PrivateProviders } from "@/providers/private/PrivateProviders.tsx";
 
@@ -29,7 +29,7 @@ export default function App() {
             </PrivateProviders>
           }
         >
-          <Route path={"/:workspaceId/*"} element={<MainView />} />
+          <Route path={"/:workspaceId/*"} element={<WorkspaceView />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       )}

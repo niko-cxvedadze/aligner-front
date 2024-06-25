@@ -1,25 +1,8 @@
-import { PropsWithChildren, useEffect } from "react";
-import { TWorkspace } from "@/@types/api.types.ts";
-import { privateAxios } from "@/utils/privateAxios.ts";
-import { useQueryClient, queryOptions } from "@tanstack/react-query";
-
-export const getWorkspaces = (): any =>
-  privateAxios.get("/workspace").then((response) => response.data);
-
-export const workspacesOptions = queryOptions<TWorkspace[], string>({
-  queryKey: ["workspaces"],
-  queryFn: getWorkspaces,
-  networkMode: "offlineFirst",
-  staleTime: Infinity,
-  retry: false,
-});
+import { PropsWithChildren } from "react";
+import { useWorkspaces } from "@/hooks/useWorkspaces";
 
 export function StaticDataProvider({ children }: PropsWithChildren<any>) {
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    queryClient.prefetchQuery(workspacesOptions);
-  }, []);
+  useWorkspaces();
 
   return <div>{children}</div>;
 }
