@@ -26,6 +26,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { privateAxios } from "@/utils/privateAxios.ts";
 import { Separator } from "@/components/ui/separator.tsx";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -80,6 +81,9 @@ export function CreateWorkspaceModal({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <DialogHeader>
               <DialogTitle>Create Workspace</DialogTitle>
+              <DialogDescription>
+                Workspace is way to manage your tasks
+              </DialogDescription>
             </DialogHeader>
             <Separator />
             <FormField
