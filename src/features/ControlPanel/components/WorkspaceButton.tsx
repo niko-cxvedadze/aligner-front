@@ -9,10 +9,9 @@ import { privateAxios } from "@/utils/privateAxios.ts";
 import { useMutation } from "@tanstack/react-query";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { useQueryClient } from "@tanstack/react-query";
-import { ToggleGroupItem } from "@/components/ui/toggle-group.tsx";
-
 import { toast } from "@/components/ui/use-toast.ts";
 import { TWorkspace } from "@/@types/api.types.ts";
+import { ToggleGroupItem } from "@/components/ui/toggle-group.tsx";
 import { AgreeModal } from "@/components/custom/AgreeModal.tsx";
 import {
   Tooltip,

@@ -1,13 +1,7 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import {
   Dialog,
   DialogTitle,
@@ -19,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+
+import { ComboBox } from "@/components/custom/ComboBox";
 
 type CreateTaskModalProps = {
   onOpenChange: (open: boolean) => void;
@@ -71,7 +67,6 @@ export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
                 name="description"
                 render={({ field }) => (
                   <FormItem>
-                    {/* <FormLabel>Description</FormLabel> */}
                     <FormControl>
                       <Textarea
                         placeholder="Enter task description"
@@ -81,6 +76,34 @@ export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
                   </FormItem>
                 )}
               />
+              <ComboBox
+                value="backlog"
+                onChange={(value) => console.log(value)}
+                options={[
+                  {
+                    value: "backlog",
+                    label: "Backlog",
+                  },
+                  {
+                    value: "todo",
+                    label: "Todo",
+                  },
+                  {
+                    value: "in progress",
+                    label: "In Progress",
+                  },
+                  {
+                    value: "done",
+                    label: "Done",
+                  },
+                  {
+                    value: "canceled",
+                    label: "Canceled",
+                  },
+                ]}
+              >
+                <Button>Backlog</Button>
+              </ComboBox>
             </div>
             <Separator className="my-4" />
             <DialogFooter className="pb-4 px-4">
