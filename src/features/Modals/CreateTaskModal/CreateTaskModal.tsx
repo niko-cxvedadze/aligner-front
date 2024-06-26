@@ -13,8 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
-
 import { ComboBox } from "@/components/custom/ComboBox";
+import { taskStatusesList, taskStatuses } from "@/@config/tasks.config";
 
 type CreateTaskModalProps = {
   onOpenChange: (open: boolean) => void;
@@ -36,6 +36,7 @@ export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      status: "todo",
     },
   });
 
@@ -76,34 +77,32 @@ export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
                   </FormItem>
                 )}
               />
-              <ComboBox
-                value="backlog"
-                onChange={(value) => console.log(value)}
-                options={[
-                  {
-                    value: "backlog",
-                    label: "Backlog",
-                  },
-                  {
-                    value: "todo",
-                    label: "Todo",
-                  },
-                  {
-                    value: "in progress",
-                    label: "In Progress",
-                  },
-                  {
-                    value: "done",
-                    label: "Done",
-                  },
-                  {
-                    value: "canceled",
-                    label: "Canceled",
-                  },
-                ]}
-              >
-                <Button>Backlog</Button>
-              </ComboBox>
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <ComboBox
+                        value={field.value}
+                        onChange={(value) => field.onChange(value.value)}
+                        options={taskStatusesList}
+                      >
+                        <Button variant="secondary" size={"sm"}>
+                          {field.value && (
+                            <>
+                              <span className="mr-1.5">
+                                {taskStatuses[field.value]?.icon}
+                              </span>
+                              {taskStatuses[field.value]?.label}
+                            </>
+                          )}
+                        </Button>
+                      </ComboBox>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
             </div>
             <Separator className="my-4" />
             <DialogFooter className="pb-4 px-4">

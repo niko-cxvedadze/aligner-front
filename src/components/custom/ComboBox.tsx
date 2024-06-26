@@ -18,6 +18,7 @@ import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 export type TCompoboxOption = {
   value: string;
   label: string;
+  icon?: any;
 };
 
 type ComboBoxProps = {
@@ -54,6 +55,7 @@ export function ComboBox({
                   setOpen(false);
                 }}
               >
+                {option.icon && <span className="mr-1.5">{option.icon}</span>}
                 {option.label}
               </CommandItem>
             ))}
