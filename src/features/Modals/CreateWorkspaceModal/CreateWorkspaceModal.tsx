@@ -26,7 +26,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { privateAxios } from "@/utils/privateAxios.ts";
 import { Separator } from "@/components/ui/separator.tsx";
-import { DialogDescription } from "@radix-ui/react-dialog";
+import { ColorPicker } from "@/components/custom/ColorPicker";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -76,29 +76,29 @@ export function CreateWorkspaceModal({
 
   return (
     <Dialog open={true} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[625px] p-0 w-full">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <DialogHeader>
-              <DialogTitle>Create Workspace</DialogTitle>
-              <DialogDescription>
-                Workspace is way to manage your tasks
-              </DialogDescription>
-            </DialogHeader>
+            <div className="pt-4 px-4 space-y-4">
+              <DialogHeader>
+                <DialogTitle>Create Workspace</DialogTitle>
+              </DialogHeader>
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter workspace name" {...field} />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+              <ColorPicker background="#20000" setBackground={() => {}} />
+            </div>
             <Separator />
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter workspace name" {...field} />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <DialogFooter>
+            <DialogFooter className="pb-4 px-4">
               <Button type="submit" disabled={isPending}>
                 {isPending && (
                   <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
