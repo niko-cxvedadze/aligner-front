@@ -56,8 +56,9 @@ export function WorkspaceButton({ workspace }: WorkspaceButtonProps) {
           <TooltipTrigger>
             <ToggleGroupItem
               value={workspace._id}
-              className="w-[45px] h-[45px]"
               variant="outline"
+              className={`w-[45px] h-[45px]`}
+              style={{ borderColor: workspace?.color, color: workspace?.color }}
             >
               {workspace.name.split("").slice(0, 2).join("").toUpperCase()}
             </ToggleGroupItem>

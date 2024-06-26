@@ -32,6 +32,7 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "name must be at least 2 characters.",
   }),
+  color: z.string().optional(),
 });
 
 type CreateWorkspaceModalProps = {
@@ -95,7 +96,22 @@ export function CreateWorkspaceModal({
                   </FormItem>
                 )}
               />
-              <ColorPicker background="#20000" setBackground={() => {}} />
+              <FormField
+                control={form.control}
+                name="color"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Workspace Color</FormLabel>
+                    <FormControl>
+                      <ColorPicker
+                        className="w-full"
+                        background={field.value || ""}
+                        setBackground={field.onChange}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
             </div>
             <Separator />
             <DialogFooter className="pb-4 px-4">
