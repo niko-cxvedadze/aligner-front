@@ -2,6 +2,12 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { useParams } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { privateAxios } from "@/utils/privateAxios";
+import { useToast } from "@/components/ui/use-toast.ts";
+import { ReloadIcon } from "@radix-ui/react-icons";
+
 import {
   Dialog,
   DialogTitle,
@@ -37,16 +43,42 @@ const formSchema = z.object({
 });
 
 export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
+  const { toast } = useToast();
+  const { workspaceId } = useParams<{ workspaceId: string }>();
+  const queryClient = useQueryClient();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       status: "todo",
+      description: "",
       priority: "no-priority",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {}
+  const { mutate: createTask, isPending } = useMutation({
+    mutationKey: ["createWorkspace"],
+    mutationFn: async (values: z.infer<typeof formSchema>) => {
+      return privateAxios.post("/task", { workspaceId, ...values });
+    },
+    onSuccess: (response) => {
+      const queryData = queryClient.getQueryData(["tasks", workspaceId]);
+      const newTasks = [...(queryData as any), response.data];
+      queryClient.setQueryData(["tasks", workspaceId], newTasks);
+      toast({ description: "Task created" });
+      onOpenChange(false);
+    },
+    onError: () => {
+      toast({
+        description: "Failed to create task",
+        variant: "destructive",
+      });
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    if (workspaceId) createTask(values);
+  }
 
   return (
     <Dialog open={true} onOpenChange={onOpenChange}>
@@ -98,7 +130,7 @@ export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
                           <Button variant="secondary" size={"sm"}>
                             {field.value && (
                               <>
-                                <span className="mr-1.5">
+                                <span className="mr-2">
                                   {taskStatuses[field.value]?.icon}
                                 </span>
                                 {taskStatuses[field.value]?.label}
@@ -125,7 +157,7 @@ export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
                           <Button variant="secondary" size={"sm"}>
                             {field.value && (
                               <>
-                                <span className="mr-1.5">
+                                <span className="mr-2">
                                   {taskPriorities[field.value]?.icon}
                                 </span>
                                 {taskPriorities[field.value]?.label}
@@ -141,8 +173,10 @@ export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
             </div>
             <Separator className="my-4" />
             <DialogFooter className="pb-4 px-4">
-              <Button type="submit" disabled={true}>
-                {/* {true && <ReloadIcon />} */}
+              <Button type="submit" disabled={isPending}>
+                {isPending && (
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                )}
                 Create
               </Button>
             </DialogFooter>
