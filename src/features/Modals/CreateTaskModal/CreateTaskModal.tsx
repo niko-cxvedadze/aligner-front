@@ -14,7 +14,12 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { ComboBox } from "@/components/custom/ComboBox";
-import { taskStatusesList, taskStatuses } from "@/@config/tasks.config";
+import {
+  taskStatusesList,
+  taskStatuses,
+  taskPriorities,
+  taskPrioritiesList,
+} from "@/@config/tasks.config";
 
 type CreateTaskModalProps = {
   onOpenChange: (open: boolean) => void;
@@ -37,6 +42,7 @@ export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
     defaultValues: {
       name: "",
       status: "todo",
+      priority: "no-priority",
     },
   });
 
@@ -56,7 +62,6 @@ export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    {/* <FormLabel>Title</FormLabel> */}
                     <FormControl>
                       <Input placeholder="Enter task title" {...field} />
                     </FormControl>
@@ -77,32 +82,62 @@ export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="status"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <ComboBox
-                        value={field.value}
-                        onChange={(value) => field.onChange(value.value)}
-                        options={taskStatusesList}
-                      >
-                        <Button variant="secondary" size={"sm"}>
-                          {field.value && (
-                            <>
-                              <span className="mr-1.5">
-                                {taskStatuses[field.value]?.icon}
-                              </span>
-                              {taskStatuses[field.value]?.label}
-                            </>
-                          )}
-                        </Button>
-                      </ComboBox>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              <div className="flex gap-4">
+                <FormField
+                  control={form.control}
+                  name="status"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <ComboBox
+                          value={field.value}
+                          commandInputPlaceholder="Change status..."
+                          onChange={(value) => field.onChange(value.value)}
+                          options={taskStatusesList}
+                        >
+                          <Button variant="secondary" size={"sm"}>
+                            {field.value && (
+                              <>
+                                <span className="mr-1.5">
+                                  {taskStatuses[field.value]?.icon}
+                                </span>
+                                {taskStatuses[field.value]?.label}
+                              </>
+                            )}
+                          </Button>
+                        </ComboBox>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="priority"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <ComboBox
+                          value={field.value}
+                          commandInputPlaceholder="Set priority..."
+                          onChange={(value) => field.onChange(value.value)}
+                          options={taskPrioritiesList}
+                        >
+                          <Button variant="secondary" size={"sm"}>
+                            {field.value && (
+                              <>
+                                <span className="mr-1.5">
+                                  {taskPriorities[field.value]?.icon}
+                                </span>
+                                {taskPriorities[field.value]?.label}
+                              </>
+                            )}
+                          </Button>
+                        </ComboBox>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
             <Separator className="my-4" />
             <DialogFooter className="pb-4 px-4">

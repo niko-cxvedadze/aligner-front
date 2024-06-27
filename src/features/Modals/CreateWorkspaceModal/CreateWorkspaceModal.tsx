@@ -79,7 +79,7 @@ export function CreateWorkspaceModal({
     <Dialog open={true} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[625px] p-0 w-full">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="pt-4 px-4 space-y-4">
               <DialogHeader>
                 <DialogTitle>Create Workspace</DialogTitle>
@@ -89,7 +89,6 @@ export function CreateWorkspaceModal({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
                     <FormControl>
                       <Input placeholder="Enter workspace name" {...field} />
                     </FormControl>
@@ -101,10 +100,10 @@ export function CreateWorkspaceModal({
                 name="color"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Workspace Color</FormLabel>
                     <FormControl>
                       <ColorPicker
                         className="w-full"
+                        placeholder="Pick a workspace color"
                         background={field.value || ""}
                         setBackground={field.onChange}
                       />
@@ -113,7 +112,7 @@ export function CreateWorkspaceModal({
                 )}
               />
             </div>
-            <Separator />
+            <Separator className="my-4" />
             <DialogFooter className="pb-4 px-4">
               <Button type="submit" disabled={isPending}>
                 {isPending && (

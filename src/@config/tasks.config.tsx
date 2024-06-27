@@ -1,13 +1,19 @@
-import { TTaskStatus } from "@/@types/global.types";
+import { TCompoboxOption } from "@/components/custom/ComboBox";
+
 import {
   CheckCircledIcon,
   StopwatchIcon,
   CircleIcon,
   QuestionMarkCircledIcon,
   CrossCircledIcon,
+  MinusIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  ChevronUpIcon,
+  DoubleArrowUpIcon,
 } from "@radix-ui/react-icons";
 
-export const taskStatuses: Record<string, TTaskStatus> = {
+export const taskStatuses: Record<string, TCompoboxOption> = {
   backlog: {
     label: "Backlog",
     value: "backlog",
@@ -35,4 +41,35 @@ export const taskStatuses: Record<string, TTaskStatus> = {
   },
 };
 
-export const taskStatusesList: TTaskStatus[] = Object.values(taskStatuses);
+export const taskStatusesList: TCompoboxOption[] = Object.values(taskStatuses);
+
+export const taskPriorities: Record<string, TCompoboxOption> = {
+  "no-priority": {
+    label: "No Priority",
+    value: "no-priority",
+    icon: <MinusIcon />,
+  },
+  urgent: {
+    label: "Urgent",
+    value: "urgent",
+    icon: <DoubleArrowUpIcon />,
+  },
+  low: {
+    label: "Low",
+    value: "low",
+    icon: <ChevronDownIcon />,
+  },
+  medium: {
+    label: "Medium",
+    value: "medium",
+    icon: <ChevronRightIcon />,
+  },
+  high: {
+    label: "High",
+    value: "high",
+    icon: <ChevronUpIcon />,
+  },
+};
+
+export const taskPrioritiesList: TCompoboxOption[] =
+  Object.values(taskPriorities);

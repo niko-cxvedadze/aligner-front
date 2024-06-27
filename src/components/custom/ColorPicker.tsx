@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 
 type ColorPickerProps = {
   background: string;
+  placeholder?: string;
   setBackground: (background: string) => void;
   className?: string;
 };
@@ -17,6 +18,7 @@ type ColorPickerProps = {
 export function ColorPicker({
   className,
   background,
+  placeholder = "Pick a color",
   setBackground,
 }: ColorPickerProps) {
   const solids = [
@@ -51,7 +53,7 @@ export function ColorPicker({
               <Paintbrush className="h-4 w-4" />
             )}
             <div className="truncate flex-1">
-              {background ? background : "Pick a color"}
+              {background ? background : placeholder}
             </div>
           </div>
         </Button>
