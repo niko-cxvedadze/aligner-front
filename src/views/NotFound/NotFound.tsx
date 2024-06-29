@@ -8,7 +8,7 @@ export function NotFound() {
 
   useEffect(() => {
     const workspace = data?.find((workspace) => workspace.default);
-    if (workspace) navigate(`/${workspace._id}`);
+    if (workspace) navigate(`/workspace/${workspace._id}`);
   }, [data]);
 
   return <></>;
