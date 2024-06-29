@@ -1,8 +1,9 @@
 import { UserButton } from "@clerk/clerk-react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ToggleGroup } from "@/components/ui/toggle-group.tsx";
-import { NewWorkspace } from "@/features/ControlPanel/components/NewWorkspace.tsx";
-import { WorkspaceButton } from "@/features/ControlPanel/components/WorkspaceButton.tsx";
+
+import { NewWorkspace } from "@/layout/MainLayout/ControlPanel/components/NewWorkspace.tsx";
+import { WorkspaceButton } from "@/layout/MainLayout/ControlPanel/components/WorkspaceButton.tsx";
 
 import { useWorkspaces } from "@/hooks/useWorkspaces";
 
