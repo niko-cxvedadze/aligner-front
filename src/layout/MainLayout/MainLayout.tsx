@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import { ActionsPanel } from "@/features/ActionsPanel";
-import { ControlPanel } from "@/features/ControlPanel";
+import { ActionsPanel } from "./ActionsPanel";
+import { ControlPanel } from "./ControlPanel";
 
 export function MainLayout() {
   return (

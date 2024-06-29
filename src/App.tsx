@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { SignIn, SignUp, useAuth } from "@clerk/clerk-react";
 
 import { AuthLayout } from "./layout/AuthLayout";
-import { MainLayout } from "@/layout/MainLayout.tsx";
+import { MainLayout } from "@/layout/MainLayout";
 
 // views
 import { WorkspaceView } from "@/views/WorkspaceView";
