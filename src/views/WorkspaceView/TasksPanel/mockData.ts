@@ -60,11 +60,8 @@ export function makeData(...lens: number[]) {
 const data = makeData(1000);
 
 //simulates a backend api
-export const fetchData = async (
-  start: number,
-  size: number,
-  sorting: SortingState
-) => {
+export const fetchData = async (start: number, size: number) => {
+  const sorting = [{ id: 0, desc: false }] as any;
   const dbData = [...data];
   if (sorting.length) {
     const sort = sorting[0] as ColumnSort;

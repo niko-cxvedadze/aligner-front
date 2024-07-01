@@ -1,4 +1,4 @@
-import React from "react";
+import { useMemo, useCallback, useRef } from "react";
 
 import {
   Table,
@@ -10,100 +10,65 @@ import {
 } from "@/components/ui/table";
 
 import {
-  ColumnDef,
+  Row,
   flexRender,
   getCoreRowModel,
-  getSortedRowModel,
-  OnChangeFn,
-  Row,
-  SortingState,
   useReactTable,
+  getSortedRowModel,
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 
-import { fetchData, Person, PersonApiResponse } from "./mockData.ts";
+import { Person } from "./mockData.ts";
+import { tasksColumns } from "@/views/WorkspaceView/TasksPanel/TasksTable/Columns.tsx";
+import { privateAxios } from "@/utils/privateAxios.ts";
+
+async function fetchTasks(props: {
+  workspaceId: string;
+  skip: number;
+  limit: number;
+}) {
+  const { workspaceId, skip, limit } = props;
+  return privateAxios
+    .get(`/task/${workspaceId}?skip=${skip}&limit=${limit}`)
+    .then((response) => response.data);
+}
 
 const fetchSize = 50;
 
 export function ExampleTable() {
-  //we need a reference to the scrolling element for logic down below
-  const tableContainerRef = React.useRef<HTMLDivElement>(null);
+  const { workspaceId } = useParams<{ workspaceId: string }>();
+  const tableContainerRef = useRef<HTMLDivElement>(null);
 
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const { data, fetchNextPage, isFetching } = useInfiniteQuery<any>({
+    queryKey: ["tasks", workspaceId],
+    queryFn: async ({ pageParam = 0 }) => {
+      const start = (pageParam as number) * fetchSize;
+      const fetchedData = await fetchTasks({
+        workspaceId: workspaceId as string,
+        skip: start,
+        limit: fetchSize,
+      });
+      return fetchedData;
+    },
+    initialPageParam: 0,
+    placeholderData: keepPreviousData,
+    getNextPageParam: (_lastGroup, groups) => groups.length,
+  });
 
-  const columns = React.useMemo<ColumnDef<Person>[]>(
-    () => [
-      {
-        accessorKey: "firstName",
-        cell: (info) => info.getValue(),
-      },
-      {
-        accessorFn: (row) => row.lastName,
-        id: "lastName",
-        cell: (info) => info.getValue(),
-      },
-      {
-        accessorKey: "age",
-        header: () => "Age",
-        size: 50,
-      },
-      {
-        accessorKey: "visits",
-        header: () => <span>Visits</span>,
-        size: 50,
-      },
-      {
-        accessorKey: "status",
-        header: "Status",
-      },
-      {
-        accessorKey: "progress",
-        header: "Profile Progress",
-        size: 80,
-      },
-      {
-        accessorKey: "createdAt",
-        header: "Created At",
-        cell: (info) => info.getValue<Date>().toLocaleString(),
-        size: 200,
-      },
-    ],
-    []
-  );
-
-  //react-query has a useInfiniteQuery hook that is perfect for this use case
-  const { data, fetchNextPage, isFetching } =
-    useInfiniteQuery<PersonApiResponse>({
-      queryKey: [
-        "people",
-        sorting, //refetch when sorting changes
-      ],
-      queryFn: async ({ pageParam = 0 }) => {
-        const start = (pageParam as number) * fetchSize;
-        const fetchedData = await fetchData(start, fetchSize, sorting); //pretend api call
-        return fetchedData;
-      },
-      initialPageParam: 0,
-      getNextPageParam: (_lastGroup, groups) => groups.length,
-      refetchOnWindowFocus: false,
-      placeholderData: keepPreviousData,
-    });
-
-  //flatten the array of arrays from the useInfiniteQuery hook
-  const flatData = React.useMemo(
-    () => data?.pages?.flatMap((page) => page.data) ?? [],
+  const flatData = useMemo(
+    () => data?.pages?.flatMap((page) => page.tasks) ?? [],
     [data]
   );
-  const totalDBRowCount = data?.pages?.[0]?.meta?.totalRowCount ?? 0;
+
+  const totalDBRowCount = data?.pages?.[0]?.total ?? 0;
   const totalFetched = flatData.length;
 
-  //called on scroll and possibly on mount to fetch more data as the user scrolls and reaches bottom of table
-  const fetchMoreOnBottomReached = React.useCallback(
+  const fetchMoreOnBottomReached = useCallback(
     (containerRefElement?: HTMLDivElement | null) => {
       if (containerRefElement) {
         const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
-        //once the user has scrolled within 500px of the bottom of the table, fetch more data if we can
         if (
           scrollHeight - scrollTop - clientHeight < 500 &&
           !isFetching &&
@@ -116,44 +81,21 @@ export function ExampleTable() {
     [fetchNextPage, isFetching, totalFetched, totalDBRowCount]
   );
 
-  //a check on mount and after a fetch to see if the table is already scrolled to the bottom and immediately needs to fetch more data
-  React.useEffect(() => {
-    fetchMoreOnBottomReached(tableContainerRef.current);
-  }, [fetchMoreOnBottomReached]);
-
   const table = useReactTable({
+    columns: tasksColumns as any,
     data: flatData,
-    columns,
-    state: {
-      sorting,
-    },
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     manualSorting: true,
     debugTable: true,
   });
 
-  //scroll to top of table when sorting changes
-  const handleSortingChange: OnChangeFn<SortingState> = (updater) => {
-    setSorting(updater);
-    if (!!table.getRowModel().rows.length) {
-      rowVirtualizer.scrollToIndex?.(0);
-    }
-  };
-
-  //since this table option is derived from table row model state, we're using the table.setOptions utility
-  table.setOptions((prev) => ({
-    ...prev,
-    onSortingChange: handleSortingChange,
-  }));
-
   const { rows } = table.getRowModel();
 
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
-    estimateSize: () => 33, //estimate row height for accurate scrollbar dragging
+    estimateSize: () => 33,
     getScrollElement: () => tableContainerRef.current,
-    //measure dynamic row height, except in firefox because it measures table border height incorrectly
     measureElement:
       typeof window !== "undefined" &&
       navigator.userAgent.indexOf("Firefox") === -1
