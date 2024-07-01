@@ -1,14 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { useSearchParams } from "react-router-dom";
 import { PlusIcon } from "@radix-ui/react-icons";
-import { ScrollArea } from "@/components/ui/scroll-area.tsx";
-import { useWorkspaceTasks } from "@/hooks/useWorkspaceTasks";
 
-import { DataTable } from "./TasksTable/DataTable";
-import { tasksColumns } from "./TasksTable/Columns";
+import { ExampleTable } from "@/views/WorkspaceView/TasksPanel/ExampleTable.tsx";
 
 export function TasksPanel() {
-  const { data: tasks } = useWorkspaceTasks();
   const [, setSearchParams] = useSearchParams();
 
   return (
@@ -25,9 +21,9 @@ export function TasksPanel() {
           </Button>
         </div>
       </div>
-      <ScrollArea className="w-full h-full mt-3 px-3 table-height">
-        <DataTable columns={tasksColumns} data={tasks || []} />
-      </ScrollArea>
+
+      <ExampleTable />
+      {/*<DataTable columns={tasksColumns} data={tasks || []} />*/}
     </>
   );
 }
