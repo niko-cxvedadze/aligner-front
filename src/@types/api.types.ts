@@ -4,6 +4,8 @@ export type TWorkspace = {
   ownerId: string;
   color?: string;
   default: boolean;
+  createdAt: string;
+  updatedAt: string;
 };
 
 export type TTask = {
@@ -13,4 +15,6 @@ export type TTask = {
   priority: string;
   status: string;
   workspaceId: string;
+  createdAt: string;
+  updatedAt: string;
 };

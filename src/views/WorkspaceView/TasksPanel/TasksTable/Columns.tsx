@@ -1,6 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { TTask } from "@/@types/api.types";
 
+import { formatDate } from "@/utils/formatDate.ts";
+
 import { taskPriorities, taskStatuses } from "@/@config/tasks.config";
 
 export const tasksColumns: ColumnDef<TTask>[] = [
@@ -38,6 +40,20 @@ export const tasksColumns: ColumnDef<TTask>[] = [
           {taskPriorities[row.getValue("priority") as string]?.label}
         </div>
       );
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Created At",
+    cell: ({ row }) => {
+      return formatDate(row.getValue("createdAt"), "standard");
+    },
+  },
+  {
+    accessorKey: "updatedAt",
+    header: "Updated At",
+    cell: ({ row }) => {
+      return formatDate(row.getValue("updatedAt"), "standard");
     },
   },
 ];
