@@ -21,9 +21,9 @@ export function TasksPanel() {
           </Button>
         </div>
       </div>
-
-      <ExampleTable />
-      {/*<DataTable columns={tasksColumns} data={tasks || []} />*/}
+      <div className="px-3">
+        <ExampleTable />
+      </div>
     </>
   );
 }
