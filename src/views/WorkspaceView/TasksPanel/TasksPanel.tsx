@@ -12,7 +12,7 @@ export function TasksPanel() {
   const [, setSearchParams] = useSearchParams();
 
   return (
-    <ScrollArea className="w-full h-full">
+    <>
       <div className="w-full flex flex-row justify-between px-3 pt-3">
         <div className="flex"></div>
         <div>
@@ -25,9 +25,9 @@ export function TasksPanel() {
           </Button>
         </div>
       </div>
-      <div className="mt-3 px-3">
+      <ScrollArea className="w-full h-full mt-3 px-3 table-height">
         <DataTable columns={tasksColumns} data={tasks || []} />
-      </div>
-    </ScrollArea>
+      </ScrollArea>
+    </>
   );
 }

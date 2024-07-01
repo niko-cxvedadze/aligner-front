@@ -81,3 +81,8 @@
     width: 45px;
     height: 45px;
 }
+
+.table-height {
+    height: 100%;
+    max-height: calc(100vh - 165px);
+}
