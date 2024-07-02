@@ -20,9 +20,9 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
-import { Person } from "./mockData.ts";
-import { tasksColumns } from "@/views/WorkspaceView/TasksPanel/TasksTable/Columns.tsx";
+import { Person } from "../mockData.ts";
 import { privateAxios } from "@/utils/privateAxios.ts";
+import { tasksColumns } from "@/views/WorkspaceView/TasksPanel/TasksTable/TasksColumns.tsx";
 
 async function fetchTasks(props: {
   workspaceId: string;
@@ -37,7 +37,7 @@ async function fetchTasks(props: {
 
 const fetchSize = 50;
 
-export function ExampleTable() {
+export function TasksTable() {
   const { workspaceId } = useParams<{ workspaceId: string }>();
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
@@ -62,8 +62,9 @@ export function ExampleTable() {
     [data]
   );
 
-  const totalDBRowCount = data?.pages?.[0]?.total ?? 0;
-  const totalFetched = flatData.length;
+  const totalDBRowCount = useMemo(() => data?.pages?.[0]?.total ?? 0, [data]);
+
+  const totalFetched = useMemo(() => flatData.length, [flatData.length]);
 
   const fetchMoreOnBottomReached = useCallback(
     (containerRefElement?: HTMLDivElement | null) => {
@@ -106,14 +107,9 @@ export function ExampleTable() {
 
   return (
     <div
-      className="rounded-md border table-height mt-3 px-3"
-      onScroll={(e) => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
       ref={tableContainerRef}
-      style={{
-        width: "100%",
-        overflow: "auto",
-        position: "relative",
-      }}
+      onScroll={(e) => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
+      className="rounded-md border table-height mt-3 w-full overflow-auto relative"
     >
       <Table>
         <TableHeader
@@ -123,14 +119,12 @@ export function ExampleTable() {
           }}
         >
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow
-              key={headerGroup.id}
-              style={{ display: "flex", width: "100%" }}
-            >
+            <TableRow key={headerGroup.id} className="w-full flex">
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead
                     key={header.id}
+                    className="flex items-center"
                     style={{
                       width: header.getSize(),
                     }}
@@ -159,11 +153,8 @@ export function ExampleTable() {
           ))}
         </TableHeader>
         <TableBody
-          style={{
-            display: "grid",
-            height: `${rowVirtualizer.getTotalSize()}px`,
-            position: "relative",
-          }}
+          className="relative grid"
+          style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
         >
           {rowVirtualizer.getVirtualItems().map((virtualRow) => {
             const row = rows[virtualRow.index] as Row<Person>;
@@ -172,21 +163,14 @@ export function ExampleTable() {
                 data-index={virtualRow.index}
                 ref={(node) => rowVirtualizer.measureElement(node)}
                 key={row.id}
-                style={{
-                  display: "flex",
-                  position: "absolute",
-                  transform: `translateY(${virtualRow.start}px)`,
-                  width: "100%",
-                }}
+                className="flex absolute w-full"
               >
                 {row.getVisibleCells().map((cell) => {
                   return (
                     <TableCell
                       key={cell.id}
-                      style={{
-                        display: "flex",
-                        width: cell.column.getSize(),
-                      }}
+                      className="flex"
+                      style={{ width: cell.column.getSize() }}
                     >
                       {flexRender(
                         cell.column.columnDef.cell,

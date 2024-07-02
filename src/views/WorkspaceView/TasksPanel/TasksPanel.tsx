@@ -1,8 +1,7 @@
-import { Button } from "@/components/ui/button";
+import { TasksTable } from "./TasksTable";
 import { useSearchParams } from "react-router-dom";
 import { PlusIcon } from "@radix-ui/react-icons";
-
-import { ExampleTable } from "@/views/WorkspaceView/TasksPanel/ExampleTable.tsx";
+import { Button } from "@/components/ui/button";
 
 export function TasksPanel() {
   const [, setSearchParams] = useSearchParams();
@@ -22,7 +21,7 @@ export function TasksPanel() {
         </div>
       </div>
       <div className="px-3">
-        <ExampleTable />
+        <TasksTable />
       </div>
     </>
   );
