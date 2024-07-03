@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useAtom } from "jotai";
-import { useMemo, useCallback, useRef } from "react";
+import { useMemo, useCallback, useRef, useState } from "react";
 import {
   Table,
   TableBody,
@@ -16,6 +16,7 @@ import {
   useReactTable,
   getSortedRowModel,
   VisibilityState,
+  ColumnFiltersState,
 } from "@tanstack/react-table";
 import { atomWithStorage } from "jotai/utils";
 import { privateAxios } from "@/utils/privateAxios.ts";
@@ -86,18 +87,21 @@ export function TasksTable() {
   );
 
   const [columnVisibility, setColumnVisibility] = useAtom(tasksTableViewAtom);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     columns: tasksColumns as any,
     data: flatData,
     state: {
       columnVisibility,
+      columnFilters,
     },
     manualSorting: true,
     debugTable: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
+    onColumnFiltersChange: setColumnFilters,
   });
 
   const { rows } = table.getRowModel();
