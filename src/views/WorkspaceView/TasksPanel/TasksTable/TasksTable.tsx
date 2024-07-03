@@ -65,8 +65,9 @@ export function TasksTable() {
 
   const flatData = useMemo(
     () => data?.pages?.flatMap((page) => page.tasks) ?? [],
-    [data]
+    [data?.pages, data?.pages.length, data?.pages[0]?.tasks]
   );
+
   const totalFetched = useMemo(() => flatData.length, [flatData.length]);
   const totalDBRowCount = useMemo(() => data?.pages?.[0]?.total ?? 0, [data]);
 

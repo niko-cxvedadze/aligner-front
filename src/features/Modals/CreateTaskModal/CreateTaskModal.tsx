@@ -62,9 +62,10 @@ export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
       return privateAxios.post("/task", { workspaceId, ...values });
     },
     onSuccess: (response) => {
-      const queryData = queryClient.getQueryData(["tasks", workspaceId]);
-      const newTasks = [...(queryData as any), response.data];
-      queryClient.setQueryData(["tasks", workspaceId], newTasks);
+      const queryData = queryClient.getQueryData(["tasks", workspaceId]) as any;
+      queryData.pages[0].tasks = [...queryData.pages[0].tasks, response.data];
+      queryClient.setQueryData(["tasks", workspaceId], queryData);
+
       toast({ description: "Task created" });
       onOpenChange(false);
     },
