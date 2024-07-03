@@ -1,5 +1,6 @@
+import { useParams } from "react-router-dom";
+import { useAtom } from "jotai";
 import { useMemo, useCallback, useRef } from "react";
-
 import {
   Table,
   TableBody,
@@ -8,21 +9,25 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import {
   Row,
   flexRender,
   getCoreRowModel,
   useReactTable,
   getSortedRowModel,
+  VisibilityState,
 } from "@tanstack/react-table";
-import { useVirtualizer } from "@tanstack/react-virtual";
-import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
-
-import { Person } from "../mockData.ts";
+import { atomWithStorage } from "jotai/utils";
 import { privateAxios } from "@/utils/privateAxios.ts";
+import { useVirtualizer } from "@tanstack/react-virtual";
+import { TasksTableToolbar } from "./TasksTableToolbar.tsx";
+import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import { tasksColumns } from "@/views/WorkspaceView/TasksPanel/TasksTable/TasksColumns.tsx";
+
+export const tasksTableViewAtom = atomWithStorage<VisibilityState>(
+  "tasksTableView",
+  {}
+);
 
 async function fetchTasks(props: {
   workspaceId: string;
@@ -61,10 +66,8 @@ export function TasksTable() {
     () => data?.pages?.flatMap((page) => page.tasks) ?? [],
     [data]
   );
-
-  const totalDBRowCount = useMemo(() => data?.pages?.[0]?.total ?? 0, [data]);
-
   const totalFetched = useMemo(() => flatData.length, [flatData.length]);
+  const totalDBRowCount = useMemo(() => data?.pages?.[0]?.total ?? 0, [data]);
 
   const fetchMoreOnBottomReached = useCallback(
     (containerRefElement?: HTMLDivElement | null) => {
@@ -82,13 +85,19 @@ export function TasksTable() {
     [fetchNextPage, isFetching, totalFetched, totalDBRowCount]
   );
 
+  const [columnVisibility, setColumnVisibility] = useAtom(tasksTableViewAtom);
+
   const table = useReactTable({
     columns: tasksColumns as any,
     data: flatData,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
+    state: {
+      columnVisibility,
+    },
     manualSorting: true,
     debugTable: true,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
   });
 
   const { rows } = table.getRowModel();
@@ -106,84 +115,87 @@ export function TasksTable() {
   });
 
   return (
-    <div
-      ref={tableContainerRef}
-      onScroll={(e) => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
-      className="rounded-md border table-height mt-3 w-full overflow-auto relative"
-    >
-      <Table>
-        <TableHeader
-          style={{
-            zIndex: 1,
-            position: "sticky",
-          }}
-        >
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className="w-full flex">
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead
-                    key={header.id}
-                    className="flex items-center"
-                    style={{
-                      width: header.getSize(),
-                    }}
-                  >
-                    <div
-                      {...{
-                        className: header.column.getCanSort()
-                          ? "cursor-pointer select-none"
-                          : "",
-                        onClick: header.column.getToggleSortingHandler(),
+    <div className="px-3">
+      <TasksTableToolbar table={table} />
+      <div
+        ref={tableContainerRef}
+        onScroll={(e) => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
+        className="rounded-md border table-height mt-3 w-full overflow-auto relative"
+      >
+        <Table>
+          <TableHeader
+            style={{
+              zIndex: 1,
+              position: "sticky",
+            }}
+          >
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id} className="w-full flex">
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead
+                      key={header.id}
+                      className="flex items-center"
+                      style={{
+                        width: header.getSize(),
                       }}
                     >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                      {{
-                        asc: " 🔼",
-                        desc: " 🔽",
-                      }[header.column.getIsSorted() as string] ?? null}
-                    </div>
-                  </TableHead>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody
-          className="relative grid"
-          style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
-        >
-          {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-            const row = rows[virtualRow.index] as Row<Person>;
-            return (
-              <TableRow
-                data-index={virtualRow.index}
-                ref={(node) => rowVirtualizer.measureElement(node)}
-                key={row.id}
-                className="flex absolute w-full"
-              >
-                {row.getVisibleCells().map((cell) => {
-                  return (
-                    <TableCell
-                      key={cell.id}
-                      className="flex"
-                      style={{ width: cell.column.getSize() }}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
+                      <div
+                        {...{
+                          className: header.column.getCanSort()
+                            ? "cursor-pointer select-none"
+                            : "",
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                        {{
+                          asc: " 🔼",
+                          desc: " 🔽",
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </div>
+                    </TableHead>
                   );
                 })}
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+            ))}
+          </TableHeader>
+          <TableBody
+            className="relative grid"
+            style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
+          >
+            {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+              const row = rows[virtualRow.index] as Row<any>;
+              return (
+                <TableRow
+                  data-index={virtualRow.index}
+                  ref={(node) => rowVirtualizer.measureElement(node)}
+                  key={row.id}
+                  className="flex absolute w-full"
+                >
+                  {row.getVisibleCells().map((cell) => {
+                    return (
+                      <TableCell
+                        key={cell.id}
+                        className="flex"
+                        style={{ width: cell.column.getSize() }}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
