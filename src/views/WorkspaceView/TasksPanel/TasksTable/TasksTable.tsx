@@ -109,7 +109,7 @@ export function TasksTable() {
 
   const rowVirtualizer = useVirtualizer({
     count: rows.length,
-    estimateSize: () => 33,
+    estimateSize: () => 48,
     getScrollElement: () => tableContainerRef.current,
     measureElement:
       typeof window !== "undefined" &&
@@ -178,7 +178,7 @@ export function TasksTable() {
                 <TableRow
                   key={row.id}
                   data-index={virtualRow.index}
-                  className="w-full flex absolute"
+                  className="w-full flex absolute items-center"
                   ref={(node) => rowVirtualizer.measureElement(node)}
                   style={{ transform: `translateY(${virtualRow.start}px)` }}
                 >

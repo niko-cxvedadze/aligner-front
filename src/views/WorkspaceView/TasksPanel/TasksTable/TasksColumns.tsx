@@ -2,6 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { TTask } from "@/@types/api.types";
 
 import { formatDate } from "@/utils/formatDate.ts";
+import { DataTableRowActions } from "./TasksTableRowActions";
 
 import { taskPriorities, taskStatuses } from "@/@config/tasks.config";
 
@@ -56,4 +57,5 @@ export const tasksColumns: ColumnDef<TTask>[] = [
       return formatDate(row.getValue("updatedAt"), "standard");
     },
   },
+  { id: "actions", cell: ({ row }) => <DataTableRowActions row={row} /> },
 ];
