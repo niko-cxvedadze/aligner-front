@@ -18,7 +18,7 @@ export function ControlPanel() {
         <ToggleGroup
           type={"single"}
           value={workspaceId}
-          onValueChange={(newValue) => navigate(`/${newValue}`)}
+          onValueChange={(newValue) => navigate(`/workspace/${newValue}`)}
           className={`flex flex-col gap-3 ${data?.length === 0 && `hidden`}`}
         >
           {data?.map((workspace) => {

@@ -86,8 +86,8 @@ export function TasksTable() {
     [fetchNextPage, isFetching, totalFetched, totalDBRowCount]
   );
 
-  const [columnVisibility, setColumnVisibility] = useAtom(tasksTableViewAtom);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useAtom(tasksTableViewAtom);
 
   const table = useReactTable({
     columns: tasksColumns as any,
@@ -100,8 +100,8 @@ export function TasksTable() {
     debugTable: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
     onColumnFiltersChange: setColumnFilters,
+    onColumnVisibilityChange: setColumnVisibility,
   });
 
   const { rows } = table.getRowModel();
@@ -175,10 +175,11 @@ export function TasksTable() {
               const row = rows[virtualRow.index] as Row<any>;
               return (
                 <TableRow
-                  data-index={virtualRow.index}
-                  ref={(node) => rowVirtualizer.measureElement(node)}
                   key={row.id}
-                  className="flex absolute w-full"
+                  data-index={virtualRow.index}
+                  className="w-full flex absolute"
+                  ref={(node) => rowVirtualizer.measureElement(node)}
+                  style={{ transform: `translateY(${virtualRow.start}px)` }}
                 >
                   {row.getVisibleCells().map((cell) => {
                     return (
