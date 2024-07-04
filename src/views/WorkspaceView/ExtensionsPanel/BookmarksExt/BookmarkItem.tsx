@@ -9,9 +9,16 @@ type BookmarkItemProps = {
 };
 export function BookmarkItem({ bookmark }: BookmarkItemProps) {
   const favicon = useMemo(() => getFavicon(bookmark.url), [bookmark.url]);
+
   return (
     <div className="flex gap-1.5 items-center">
-      {favicon && <img src={favicon} className="w-[15px] rounded-full" />}
+      {favicon && (
+        <img
+          src={favicon}
+          className="w-[15px] rounded-full"
+          onError={() => console.log(favicon)}
+        />
+      )}
       <Badge variant="outline" className="lowercase">
         {bookmark.topic?.title || "none"}
       </Badge>

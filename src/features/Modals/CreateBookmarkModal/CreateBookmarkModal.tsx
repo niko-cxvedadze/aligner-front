@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { useParams } from "react-router-dom";
@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useEffect } from "react";
 
 type CreateBookmarkModalProps = {
   onOpenChange: (open: boolean) => void;
@@ -61,6 +62,24 @@ export function CreateBookmarkModal({
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (workspaceId) createBookmark(values);
   }
+
+  const url = form.watch("url");
+
+  useEffect(() => {
+    if (url?.length > 0) {
+      const extractDomain = (url: string) => {
+        const domainRegex =
+          /^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n]+)/im;
+        const matches = url.match(domainRegex);
+        return matches ? matches[1] : "";
+      };
+
+      const domain = extractDomain(url);
+      if (domain?.length > 0) {
+        form.setValue("title", domain);
+      }
+    }
+  }, [url]);
 
   return (
     <Dialog open={true} onOpenChange={onOpenChange}>
