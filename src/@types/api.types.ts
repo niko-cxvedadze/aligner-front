@@ -31,7 +31,7 @@ export type TBookmark = {
   _id: string;
   title: string;
   url: string;
-  topic?: string;
+  topic?: TBookmarkTopic;
   workspaceId: string;
   createdAt: string;
   updatedAt: string;

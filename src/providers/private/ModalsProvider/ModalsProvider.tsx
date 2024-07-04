@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 
 import { CreateTaskModal } from "@/features/Modals/CreateTaskModal";
 import { CreateWorkspaceModal } from "@/features/Modals/CreateWorkspaceModal";
+import { CreateBookmarkModal } from "@/features/Modals/CreateBookmarkModal";
 
 export function ModalsProvider({ children }: PropsWithChildren) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -26,6 +27,9 @@ export function ModalsProvider({ children }: PropsWithChildren) {
       )}
       {currentModal === "create-task" && (
         <CreateTaskModal onOpenChange={(value) => !value && closeModal()} />
+      )}
+      {currentModal === "create-bookmark" && (
+        <CreateBookmarkModal onOpenChange={(value) => !value && closeModal()} />
       )}
     </>
   );
