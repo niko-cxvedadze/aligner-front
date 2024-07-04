@@ -1,13 +1,13 @@
 import { BookmarksExt } from "./BookmarksExt";
-import { NotesExt } from "./NotesExt";
-import { TimerExt } from "./TimerExt";
+// import { NotesExt } from "./NotesExt";
+// import { TimerExt } from "./TimerExt";
 
 export function ExtensionsPanel() {
   return (
-    <div>
+    <div className="p-3">
       <BookmarksExt />
-      <NotesExt />
-      <TimerExt />
+      {/* <NotesExt /> */}
+      {/* <TimerExt /> */}
     </div>
   );
 }

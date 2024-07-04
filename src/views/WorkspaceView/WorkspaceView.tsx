@@ -6,8 +6,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
 
 import { TasksPanel } from "./TasksPanel";
-// import { ExtensionsPanel } from "./ExtensionsPanel";
-import { TaskDetailsPanel } from "./TaskDetailsPanel";
+import { ExtensionsPanel } from "./ExtensionsPanel";
 
 // modal
 import { useWorkspaceTasks } from "@/hooks/useWorkspaceTasks";
@@ -23,7 +22,7 @@ export function WorkspaceView() {
       <ResizableHandle withHandle={true} />
       <ResizablePanel>
         <ScrollArea className="h-full">
-          <TaskDetailsPanel />
+          <ExtensionsPanel />
         </ScrollArea>
       </ResizablePanel>
     </ResizablePanelGroup>

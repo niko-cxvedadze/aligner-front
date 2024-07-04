@@ -18,3 +18,21 @@ export type TTask = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type TBookmarkTopic = {
+  _id: string;
+  title: string;
+  workspaceId: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type TBookmark = {
+  _id: string;
+  title: string;
+  url: string;
+  topic?: string;
+  workspaceId: string;
+  createdAt: string;
+  updatedAt: string;
+};
