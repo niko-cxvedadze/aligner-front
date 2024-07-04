@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useAtom } from "jotai";
 import { useMemo, useCallback, useRef, useState } from "react";
 import {
@@ -25,6 +25,12 @@ import { TasksTableToolbar } from "./TasksTableToolbar.tsx";
 import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import { tasksColumns } from "@/views/WorkspaceView/TasksPanel/TasksTable/TasksColumns.tsx";
 
+import {
+  filtersToQueryString,
+  queryStringToFilters,
+} from "@/utils/filtersQueryString.ts";
+import { useQueryParams } from "@/hooks/useQueryParams.ts";
+
 export const tasksTableViewAtom = atomWithStorage<VisibilityState>(
   "tasksTableView",
   {}
@@ -44,6 +50,7 @@ async function fetchTasks(props: {
 const fetchSize = 50;
 
 export function TasksTable() {
+  const { setQueryParam, searchParams } = useQueryParams();
   const { workspaceId } = useParams<{ workspaceId: string }>();
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
@@ -87,8 +94,15 @@ export function TasksTable() {
     [fetchNextPage, isFetching, totalFetched, totalDBRowCount]
   );
 
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+    queryStringToFilters(searchParams.get("filters") || ([] as any))
+  );
   const [columnVisibility, setColumnVisibility] = useAtom(tasksTableViewAtom);
+
+  useMemo(() => {
+    const filters = filtersToQueryString(columnFilters);
+    setQueryParam({ key: "filters", value: filters });
+  }, [columnFilters]);
 
   const table = useReactTable({
     columns: tasksColumns as any,
