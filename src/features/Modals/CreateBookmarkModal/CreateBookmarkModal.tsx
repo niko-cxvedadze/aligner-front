@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { useParams } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { privateAxios } from "@/utils/privateAxios";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { ReloadIcon } from "@radix-ui/react-icons";
@@ -32,7 +32,6 @@ export function CreateBookmarkModal({
   onOpenChange,
 }: CreateBookmarkModalProps) {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
   const { workspaceId } = useParams<{ workspaceId: string }>();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -47,13 +46,7 @@ export function CreateBookmarkModal({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       return privateAxios.post("/bookmark", { workspaceId, ...values });
     },
-    onSuccess: (response) => {
-      const queryData = queryClient.getQueryData([
-        "bookmarks",
-        workspaceId,
-      ]) as any;
-      //   queryData.pages[0].tasks = [...queryData.pages[0].tasks, response.data];
-      //   queryClient.setQueryData(["tasks", workspaceId], queryData);
+    onSuccess: () => {
       toast({ description: "Bookmark created" });
       onOpenChange(false);
     },
@@ -80,22 +73,22 @@ export function CreateBookmarkModal({
               </DialogHeader>
               <FormField
                 control={form.control}
-                name="title"
+                name="url"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input placeholder="Enter bookmark title" {...field} />
+                      <Input placeholder="Enter bookmark url" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
-                name="url"
+                name="title"
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input placeholder="Enter bookmark url" {...field} />
+                      <Input placeholder="Enter bookmark title" {...field} />
                     </FormControl>
                   </FormItem>
                 )}
