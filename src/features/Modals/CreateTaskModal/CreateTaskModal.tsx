@@ -28,6 +28,7 @@ import {
 } from "@/@config/tasks.config";
 
 type CreateTaskModalProps = {
+  open: boolean;
   onOpenChange: (open: boolean) => void;
 };
 
@@ -42,7 +43,7 @@ const formSchema = z.object({
   priority: z.string(),
 });
 
-export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
+export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
   const { toast } = useToast();
   const { workspaceId } = useParams<{ workspaceId: string }>();
   const queryClient = useQueryClient();
@@ -82,7 +83,7 @@ export function CreateTaskModal({ onOpenChange }: CreateTaskModalProps) {
   }
 
   return (
-    <Dialog open={true} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[625px] w-full p-0">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>

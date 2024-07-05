@@ -21,6 +21,7 @@ import { Separator } from "@/components/ui/separator";
 import { useEffect } from "react";
 
 type CreateBookmarkModalProps = {
+  open: boolean;
   onOpenChange: (open: boolean) => void;
 };
 
@@ -30,6 +31,7 @@ const formSchema = z.object({
 });
 
 export function CreateBookmarkModal({
+  open,
   onOpenChange,
 }: CreateBookmarkModalProps) {
   const { toast } = useToast();
@@ -82,7 +84,7 @@ export function CreateBookmarkModal({
   }, [url]);
 
   return (
-    <Dialog open={true} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[625px] w-full p-0">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>

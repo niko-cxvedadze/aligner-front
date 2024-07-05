@@ -30,10 +30,12 @@ const formSchema = z.object({
 });
 
 type CreateWorkspaceModalProps = {
+  open: boolean;
   onOpenChange: (open: boolean) => void;
 };
 
 export function CreateWorkspaceModal({
+  open,
   onOpenChange,
 }: CreateWorkspaceModalProps) {
   const queryClient = useQueryClient();
@@ -70,7 +72,7 @@ export function CreateWorkspaceModal({
   }
 
   return (
-    <Dialog open={true} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[625px] p-0 w-full">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>

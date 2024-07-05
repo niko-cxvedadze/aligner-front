@@ -20,17 +20,18 @@ export function ModalsProvider({ children }: PropsWithChildren) {
   return (
     <>
       {children}
-      {currentModal === "create-workspace" && (
-        <CreateWorkspaceModal
-          onOpenChange={(value) => !value && closeModal()}
-        />
-      )}
-      {currentModal === "create-task" && (
-        <CreateTaskModal onOpenChange={(value) => !value && closeModal()} />
-      )}
-      {currentModal === "create-bookmark" && (
-        <CreateBookmarkModal onOpenChange={(value) => !value && closeModal()} />
-      )}
+      <CreateWorkspaceModal
+        open={currentModal === "create-workspace"}
+        onOpenChange={(value) => !value && closeModal()}
+      />
+      <CreateTaskModal
+        open={currentModal === "create-task"}
+        onOpenChange={closeModal}
+      />
+      <CreateBookmarkModal
+        open={currentModal === "create-bookmark"}
+        onOpenChange={(value) => !value && closeModal()}
+      />
     </>
   );
 }
