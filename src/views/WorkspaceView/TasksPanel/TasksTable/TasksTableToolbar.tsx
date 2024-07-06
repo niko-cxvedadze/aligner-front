@@ -7,7 +7,6 @@ import { DataTableFacetedFilter } from "@/components/custom/DataTable/DataTableF
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
-  onFilterSubmit?: () => void;
 }
 
 export function TasksTableToolbar<TData>({

@@ -39,31 +39,11 @@ export function useWorkspaceTasksInfinite({
     queryFn: async ({ pageParam = 0 }) => {
       const start = (pageParam as number) * fetchSize;
 
-      const filters = {
+      return await fetchTasks({
         skip: start,
         limit: fetchSize,
         workspaceId: workspaceId as string,
-        statuses: [] as any[],
-        priorities: [] as any[],
-      };
-      const statuses = columnFilters.find(
-        (filter) => filter.id === "status"
-      )?.value;
-
-      if (Array.isArray(statuses) && statuses.length) {
-        filters.statuses = statuses;
-      }
-
-      const priorities = columnFilters.find(
-        (filter) => filter.id === "priority"
-      )?.value;
-
-      if (Array.isArray(priorities) && priorities.length) {
-        filters.priorities = priorities;
-      }
-
-      const fetchedData = await fetchTasks(filters);
-      return fetchedData;
+      });
     },
     initialPageParam: 0,
     placeholderData: keepPreviousData,

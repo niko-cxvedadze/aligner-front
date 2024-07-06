@@ -28,6 +28,9 @@ export const tasksColumns: ColumnDef<TTask>[] = [
         </div>
       );
     },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     accessorKey: "priority",
@@ -41,6 +44,9 @@ export const tasksColumns: ColumnDef<TTask>[] = [
           {taskPriorities[row.getValue("priority") as string]?.label}
         </div>
       );
+    },
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
     },
   },
   {

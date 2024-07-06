@@ -14,9 +14,10 @@ import {
   flexRender,
   getCoreRowModel,
   useReactTable,
-  getSortedRowModel,
   VisibilityState,
   ColumnFiltersState,
+  getFilteredRowModel,
+  getFacetedUniqueValues,
 } from "@tanstack/react-table";
 import { atomWithStorage } from "jotai/utils";
 import { useVirtualizer } from "@tanstack/react-virtual";
@@ -78,6 +79,7 @@ export function TasksTable() {
     setQueryParam({ key: "filters", value: filters });
   }, [columnFilters]);
 
+  console.log(columnFilters);
   const table = useReactTable({
     columns: tasksColumns as any,
     data: flatData,
@@ -85,10 +87,11 @@ export function TasksTable() {
       columnVisibility,
       columnFilters,
     },
-    manualSorting: true,
     debugTable: true,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getFacetedRowModel: getFilteredRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     onColumnFiltersChange: setColumnFilters,
     onColumnVisibilityChange: setColumnVisibility,
   });
