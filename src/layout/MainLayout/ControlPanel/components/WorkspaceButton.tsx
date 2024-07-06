@@ -68,7 +68,7 @@ export function WorkspaceButton({ workspace }: WorkspaceButtonProps) {
       <ContextMenuContent>
         <ContextMenuItem
           disabled={workspace.default}
-          className="cursor-pointer text-destructive"
+          className="cursor-pointer"
           onClick={() => setIsModalOpen(true)}
         >
           <TrashIcon className="mr-1.5" />

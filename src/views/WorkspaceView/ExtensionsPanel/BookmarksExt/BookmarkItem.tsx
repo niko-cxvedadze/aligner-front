@@ -12,9 +12,9 @@ import {
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
 import { toast } from "@/components/ui/use-toast.ts";
-import { TrashIcon } from "@radix-ui/react-icons";
 import { privateAxios } from "@/utils/privateAxios";
 import { AgreeModal } from "@/components/custom/AgreeModal";
+import { TrashIcon, Pencil1Icon } from "@radix-ui/react-icons";
 
 type BookmarkItemProps = {
   bookmark: TBookmark;
@@ -70,9 +70,13 @@ export function BookmarkItem({ bookmark }: BookmarkItemProps) {
         </div>
       </ContextMenuTrigger>
       <ContextMenuContent>
+        <ContextMenuItem className="cursor-pointer">
+          <Pencil1Icon className="mr-1.5" />
+          Edit
+        </ContextMenuItem>
         <ContextMenuItem
+          className="cursor-pointer"
           onClick={() => setIsModalOpen(true)}
-          className="cursor-pointer text-destructive"
         >
           <TrashIcon className="mr-1.5" />
           Delete
