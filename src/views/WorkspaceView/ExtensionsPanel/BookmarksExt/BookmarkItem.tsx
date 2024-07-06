@@ -80,10 +80,8 @@ export function BookmarkItem({ bookmark }: BookmarkItemProps) {
       </ContextMenuContent>
       <AgreeModal
         open={isModalOpen}
-        title={"Are you sure you want to delete this workspace?"}
-        description={
-          "This action cannot be undone. All tasks in this workspace will be deleted."
-        }
+        title={"Are you sure you want to delete this bookmark?"}
+        description={"This action cannot be undone."}
         onAgree={() => deleteBookmark(bookmark._id)}
         onOpenChange={(value) => setIsModalOpen(value)}
       />
