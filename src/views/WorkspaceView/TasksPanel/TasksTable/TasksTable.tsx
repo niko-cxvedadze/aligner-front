@@ -19,35 +19,20 @@ import {
   ColumnFiltersState,
 } from "@tanstack/react-table";
 import { atomWithStorage } from "jotai/utils";
-import { privateAxios } from "@/utils/privateAxios.ts";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { TasksTableToolbar } from "./TasksTableToolbar.tsx";
-import { keepPreviousData, useInfiniteQuery } from "@tanstack/react-query";
 import { tasksColumns } from "@/views/WorkspaceView/TasksPanel/TasksTable/TasksColumns.tsx";
-
 import {
   filtersToQueryString,
   queryStringToFilters,
 } from "@/utils/filtersQueryString.ts";
 import { useQueryParams } from "@/hooks/useQueryParams.ts";
+import { useWorkspaceTasksInfinite } from "./hooks/useWorkspaceTasksInfinite.ts";
 
 export const tasksTableViewAtom = atomWithStorage<VisibilityState>(
   "tasksTableView",
   {}
 );
-
-async function fetchTasks(props: {
-  workspaceId: string;
-  skip: number;
-  limit: number;
-}) {
-  const { workspaceId, skip, limit } = props;
-  return privateAxios
-    .get(`/task/${workspaceId}?skip=${skip}&limit=${limit}`)
-    .then((response) => response.data);
-}
-
-const fetchSize = 50;
 
 export function TasksTable() {
   const { setQueryParam, searchParams } = useQueryParams();
@@ -55,23 +40,13 @@ export function TasksTable() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     queryStringToFilters(searchParams.get("filters") || ([] as any))
   );
+
   const { workspaceId } = useParams<{ workspaceId: string }>();
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
-  const { data, fetchNextPage, isFetching } = useInfiniteQuery<any>({
-    queryKey: ["tasks", workspaceId],
-    queryFn: async ({ pageParam = 0 }) => {
-      const start = (pageParam as number) * fetchSize;
-      const fetchedData = await fetchTasks({
-        workspaceId: workspaceId as string,
-        skip: start,
-        limit: fetchSize,
-      });
-      return fetchedData;
-    },
-    initialPageParam: 0,
-    placeholderData: keepPreviousData,
-    getNextPageParam: (_lastGroup, groups) => groups.length,
+  const { data, fetchNextPage, isFetching } = useWorkspaceTasksInfinite({
+    columnFilters,
+    workspaceId,
   });
 
   const flatData = useMemo(
