@@ -20,7 +20,7 @@ export const getBookmarks = async (filters: getBookmarkFilters) => {
 export function useBookmarks() {
   const { workspaceId } = useParams();
   return useQuery<TBookmark[]>({
-    queryKey: ["bookmarks", { workspaceId }],
+    queryKey: ["bookmarks", workspaceId],
     queryFn: () => getBookmarks({ workspaceId: workspaceId as string }),
   });
 }

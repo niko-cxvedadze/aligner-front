@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { useParams } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { useParams } from "react-router-dom";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { privateAxios } from "@/utils/privateAxios";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { ReloadIcon } from "@radix-ui/react-icons";
@@ -35,6 +35,7 @@ export function CreateBookmarkModal({
   onOpenChange,
 }: CreateBookmarkModalProps) {
   const { toast } = useToast();
+  const queryClient = useQueryClient();
   const { workspaceId } = useParams<{ workspaceId: string }>();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,7 +50,10 @@ export function CreateBookmarkModal({
     mutationFn: async (values: z.infer<typeof formSchema>) => {
       return privateAxios.post("/bookmark", { workspaceId, ...values });
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
+      const oldBookmarks = queryClient.getQueryData(["bookmarks", workspaceId]);
+      const newBookmarks = [...(oldBookmarks as any), response.data];
+      queryClient.setQueryData(["bookmarks", workspaceId], newBookmarks);
       toast({ description: "Bookmark created" });
       onOpenChange(false);
     },
