@@ -66,7 +66,6 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
       const queryData = queryClient.getQueryData(["tasks", workspaceId]) as any;
       queryData.pages[0].tasks = [...queryData.pages[0].tasks, response.data];
       queryClient.setQueryData(["tasks", workspaceId], queryData);
-
       toast({ description: "Task created" });
       onOpenChange(false);
     },
@@ -77,7 +76,6 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
       });
     },
   });
-
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (workspaceId) createTask(values);
   }

@@ -1,5 +1,5 @@
-import { useParams, useSearchParams } from "react-router-dom";
 import { useAtom } from "jotai";
+import { useParams } from "react-router-dom";
 import { useMemo, useCallback, useRef, useState } from "react";
 import {
   Table,
@@ -51,6 +51,10 @@ const fetchSize = 50;
 
 export function TasksTable() {
   const { setQueryParam, searchParams } = useQueryParams();
+  const [columnVisibility, setColumnVisibility] = useAtom(tasksTableViewAtom);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
+    queryStringToFilters(searchParams.get("filters") || ([] as any))
+  );
   const { workspaceId } = useParams<{ workspaceId: string }>();
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
@@ -93,11 +97,6 @@ export function TasksTable() {
     },
     [fetchNextPage, isFetching, totalFetched, totalDBRowCount]
   );
-
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    queryStringToFilters(searchParams.get("filters") || ([] as any))
-  );
-  const [columnVisibility, setColumnVisibility] = useAtom(tasksTableViewAtom);
 
   useMemo(() => {
     const filters = filtersToQueryString(columnFilters);

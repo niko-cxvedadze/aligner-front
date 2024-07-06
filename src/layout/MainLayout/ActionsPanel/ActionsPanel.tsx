@@ -17,12 +17,13 @@ export function ActionsPanel() {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              size={"icon"}
+              className="h-8 px-2 lg:px-3"
               onClick={() =>
                 setQueryParam({ key: "modal", value: "create-bookmark" })
               }
             >
-              <BookmarkIcon />
+              Create Bookmark
+              <BookmarkIcon className="ml-2 h-4 w-4" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
@@ -32,12 +33,13 @@ export function ActionsPanel() {
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              size={"icon"}
+              className="h-8 px-2 lg:px-3"
               onClick={() =>
                 setQueryParam({ key: "modal", value: "create-task" })
               }
             >
-              <Pencil2Icon />
+              Create Task
+              <Pencil2Icon className="ml-2 h-4 w-4" />
             </Button>
           </TooltipTrigger>
           <TooltipContent>
