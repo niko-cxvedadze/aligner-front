@@ -1,5 +1,4 @@
 import { privateAxios } from "@/utils/privateAxios";
-import { ColumnFiltersState } from "@tanstack/react-table";
 import { useInfiniteQuery, keepPreviousData } from "@tanstack/react-query";
 
 async function fetchTasks({
@@ -25,17 +24,15 @@ async function fetchTasks({
     .then((response) => response.data);
 }
 
-const fetchSize = 50;
+const fetchSize = 20;
 
 export function useWorkspaceTasksInfinite({
-  columnFilters,
   workspaceId,
 }: {
-  columnFilters: ColumnFiltersState;
   workspaceId?: string;
 }) {
   const { data, fetchNextPage, isFetching } = useInfiniteQuery<any>({
-    queryKey: ["tasks", workspaceId, columnFilters],
+    queryKey: ["tasks", workspaceId],
     queryFn: async ({ pageParam = 0 }) => {
       const start = (pageParam as number) * fetchSize;
 

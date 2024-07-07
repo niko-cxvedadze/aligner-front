@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { useParams } from "react-router-dom";
-import { useMemo, useCallback, useRef, useState } from "react";
+import { useMemo, useCallback, useRef, useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button.tsx";
 import {
   Row,
   flexRender,
@@ -46,7 +47,6 @@ export function TasksTable() {
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
   const { data, fetchNextPage, isFetching } = useWorkspaceTasksInfinite({
-    columnFilters,
     workspaceId,
   });
 
@@ -109,6 +109,10 @@ export function TasksTable() {
         : undefined,
     overscan: 5,
   });
+
+  useEffect(() => {
+    fetchMoreOnBottomReached(tableContainerRef.current);
+  }, [fetchMoreOnBottomReached, columnFilters]);
 
   return (
     <div className="px-3">
@@ -192,6 +196,17 @@ export function TasksTable() {
             })}
           </TableBody>
         </Table>
+        <div className={"w-full flex justify-center"}>
+          {totalFetched < totalDBRowCount && !isFetching && (
+            <Button
+              className={"my-3 h-8 px-2 lg:px-3"}
+              onClick={() => fetchNextPage()}
+              variant={"ghost"}
+            >
+              See More
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
