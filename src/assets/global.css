@@ -86,3 +86,25 @@
     height: 100%;
     max-height: calc(100vh - 165px);
 }
+
+/* Scroll bar stylings */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #27272a;
+    border-radius: 8px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #27272a;
+}
