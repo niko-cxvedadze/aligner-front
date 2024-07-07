@@ -24,7 +24,7 @@ async function fetchTasks({
     .then((response) => response.data);
 }
 
-const fetchSize = 20;
+const fetchSize = 50;
 
 export function useWorkspaceTasksInfinite({
   workspaceId,

@@ -1,6 +1,7 @@
 import { Table } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { taskStatusesList, taskPrioritiesList } from "@/@config/tasks.config";
 import { DataTableViewOptions } from "@/components/custom/DataTable/DataTableViewOptions";
 import { DataTableFacetedFilter } from "@/components/custom/DataTable/DataTableFacetedFilter";
@@ -17,6 +18,14 @@ export function TasksTableToolbar<TData>({
   return (
     <div className="flex items-center justify-between w-full">
       <div className="flex flex-1 items-center space-x-2">
+        <Input
+          placeholder="Filter tasks..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("name")?.setFilterValue(event.target.value)
+          }
+          className="h-8 w-[150px] lg:w-[250px]"
+        />
         {table.getColumn("status") && (
           <DataTableFacetedFilter
             title="Status"
