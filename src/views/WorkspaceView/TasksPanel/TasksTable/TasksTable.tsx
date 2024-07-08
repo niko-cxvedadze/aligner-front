@@ -1,6 +1,5 @@
 import { useAtom } from "jotai";
-import { useParams } from "react-router-dom";
-import { useMemo, useCallback, useRef, useState, useEffect } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   Table,
   TableBody,
@@ -9,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button.tsx";
 import {
   Row,
   flexRender,
@@ -29,7 +27,7 @@ import {
   queryStringToFilters,
 } from "@/utils/filtersQueryString.ts";
 import { useQueryParams } from "@/hooks/useQueryParams.ts";
-import { useWorkspaceTasksInfinite } from "./hooks/useWorkspaceTasksInfinite.ts";
+import { useWorkspaceTasks } from "@/hooks/useWorkspaceTasks.ts";
 
 export const tasksTableViewAtom = atomWithStorage<VisibilityState>(
   "tasksTableView",
@@ -43,51 +41,22 @@ export function TasksTable() {
     queryStringToFilters(searchParams.get("filters") || ([] as any))
   );
 
-  const { workspaceId } = useParams<{ workspaceId: string }>();
   const tableContainerRef = useRef<HTMLDivElement>(null);
 
-  const { data, fetchNextPage, isFetching } = useWorkspaceTasksInfinite({
-    workspaceId,
-  });
-
-  const flatData = useMemo(
-    () => data?.pages?.flatMap((page) => page.tasks) ?? [],
-    [data?.pages, data?.pages.length, data?.pages[0]?.tasks]
-  );
-
-  const totalFetched = useMemo(() => flatData.length, [flatData.length]);
-  const totalDBRowCount = useMemo(() => data?.pages?.[0]?.total ?? 0, [data]);
-
-  const fetchMoreOnBottomReached = useCallback(
-    (containerRefElement?: HTMLDivElement | null) => {
-      if (containerRefElement) {
-        const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
-        if (
-          scrollHeight - scrollTop - clientHeight < 500 &&
-          !isFetching &&
-          totalFetched < totalDBRowCount
-        ) {
-          fetchNextPage();
-        }
-      }
-    },
-    [fetchNextPage, isFetching, totalFetched, totalDBRowCount]
-  );
+  const { data: tasksData } = useWorkspaceTasks();
 
   useMemo(() => {
     const filters = filtersToQueryString(columnFilters);
     setQueryParam({ key: "filters", value: filters });
   }, [columnFilters]);
 
-  console.log(columnFilters);
   const table = useReactTable({
     columns: tasksColumns as any,
-    data: flatData,
+    data: tasksData?.tasks || [],
     state: {
-      columnVisibility,
       columnFilters,
+      columnVisibility,
     },
-    debugTable: true,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getFacetedRowModel: getFilteredRowModel(),
@@ -110,16 +79,13 @@ export function TasksTable() {
     overscan: 5,
   });
 
-  useEffect(() => {
-    fetchMoreOnBottomReached(tableContainerRef.current);
-  }, [fetchMoreOnBottomReached, columnFilters]);
+  console.log("TasksTable");
 
   return (
     <div className="px-3">
       <TasksTableToolbar table={table} />
       <div
         ref={tableContainerRef}
-        onScroll={(e) => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
         className="rounded-md border table-height mt-3 w-full overflow-auto relative"
       >
         <Table>
@@ -196,17 +162,6 @@ export function TasksTable() {
             })}
           </TableBody>
         </Table>
-        <div className={"w-full flex justify-center"}>
-          {totalFetched < totalDBRowCount && !isFetching && (
-            <Button
-              className={"my-3 h-8 px-2 lg:px-3"}
-              onClick={() => fetchNextPage()}
-              variant={"ghost"}
-            >
-              See More
-            </Button>
-          )}
-        </div>
       </div>
     </div>
   );
