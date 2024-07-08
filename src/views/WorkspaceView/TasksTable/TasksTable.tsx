@@ -21,13 +21,14 @@ import {
 import { atomWithStorage } from "jotai/utils";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { TasksTableToolbar } from "./TasksTableToolbar.tsx";
-import { tasksColumns } from "@/views/WorkspaceView/TasksPanel/TasksTable/TasksColumns.tsx";
+import { tasksColumns } from "./TasksColumns.tsx";
 import {
   filtersToQueryString,
   queryStringToFilters,
 } from "@/utils/filtersQueryString.ts";
 import { useQueryParams } from "@/hooks/useQueryParams.ts";
 import { useWorkspaceTasks } from "@/hooks/useWorkspaceTasks.ts";
+import { cloneDeep } from "@/utils/cloneDeep.ts";
 
 export const tasksTableViewAtom = atomWithStorage<VisibilityState>(
   "tasksTableView",
@@ -45,6 +46,11 @@ export function TasksTable() {
 
   const { data: tasksData } = useWorkspaceTasks();
 
+  const tasks = useMemo(
+    () => cloneDeep(tasksData?.tasks),
+    [tasksData?.tasks.length]
+  );
+
   useMemo(() => {
     const filters = filtersToQueryString(columnFilters);
     setQueryParam({ key: "filters", value: filters });
@@ -52,7 +58,7 @@ export function TasksTable() {
 
   const table = useReactTable({
     columns: tasksColumns as any,
-    data: tasksData?.tasks || [],
+    data: tasks || [],
     state: {
       columnFilters,
       columnVisibility,
@@ -79,10 +85,8 @@ export function TasksTable() {
     overscan: 5,
   });
 
-  console.log("TasksTable");
-
   return (
-    <div className="px-3">
+    <div className="px-3 mt-3">
       <TasksTableToolbar table={table} />
       <div
         ref={tableContainerRef}

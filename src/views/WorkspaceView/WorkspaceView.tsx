@@ -4,21 +4,23 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { ScrollArea } from "@/components/ui/scroll-area.tsx";
-
-import { TasksPanel } from "./TasksPanel";
+import { TasksTable } from "./TasksTable";
 import { ExtensionsPanel } from "./ExtensionsPanel";
+import { useBookmarks } from "@/hooks/useBookmarks";
 import { useWorkspaceTasks } from "@/hooks/useWorkspaceTasks";
 
 export function WorkspaceView() {
-  const { isLoading } = useWorkspaceTasks();
+  const { isLoading: isTasksLoading } = useWorkspaceTasks();
+  const { isLoading: isBookmarksLoading } = useBookmarks();
 
-  if (isLoading) {
+  if (isTasksLoading || isBookmarksLoading) {
     return;
   }
+
   return (
     <ResizablePanelGroup direction="horizontal">
       <ResizablePanel minSize={50}>
-        <TasksPanel />
+        <TasksTable />
       </ResizablePanel>
       <ResizableHandle withHandle={true} />
       <ResizablePanel>

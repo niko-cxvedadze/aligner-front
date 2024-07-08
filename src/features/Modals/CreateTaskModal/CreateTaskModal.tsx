@@ -26,6 +26,8 @@ import {
   taskPriorities,
   taskPrioritiesList,
 } from "@/@config/tasks.config";
+import { tasksColumns } from "@/views/WorkspaceView/TasksTable/TasksColumns";
+import { cloneDeep } from "@/utils/cloneDeep";
 
 type CreateTaskModalProps = {
   open: boolean;
@@ -65,7 +67,7 @@ export function CreateTaskModal({ open, onOpenChange }: CreateTaskModalProps) {
     },
     onSuccess: (response) => {
       const queryData = queryClient.getQueryData(["tasks", workspaceId]) as any;
-      queryData.pages[0].tasks = [...queryData.pages[0].tasks, response.data];
+      queryData.tasks.push(response.data);
       queryClient.setQueryData(["tasks", workspaceId], queryData);
       toast({ description: "Task created" });
       onOpenChange(false);
