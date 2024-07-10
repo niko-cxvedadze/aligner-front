@@ -46,7 +46,6 @@ export function DataTableRowActions<TData>({
       queryClient.setQueryData(["tasks", task.workspaceId], {
         ...queryData,
         deleted: task._id,
-        tasks: cloneDeep(queryData.tasks),
       });
       toast({ description: "Task deleted" });
       setIsModalOpen(false);
