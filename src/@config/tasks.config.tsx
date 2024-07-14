@@ -4,21 +4,14 @@ import {
   CheckCircledIcon,
   StopwatchIcon,
   CircleIcon,
-  CrossCircledIcon,
   MinusIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   ChevronUpIcon,
   DoubleArrowUpIcon,
-  QuestionMarkCircledIcon,
 } from "@radix-ui/react-icons";
 
 export const taskStatuses: Record<string, TCompoboxOption> = {
-  backlog: {
-    label: "Backlog",
-    value: "backlog",
-    icon: <QuestionMarkCircledIcon />,
-  },
   todo: {
     label: "Todo",
     value: "todo",
@@ -33,11 +26,6 @@ export const taskStatuses: Record<string, TCompoboxOption> = {
     label: "Done",
     value: "done",
     icon: <CheckCircledIcon />,
-  },
-  canceled: {
-    label: "Canceled",
-    value: "canceled",
-    icon: <CrossCircledIcon />,
   },
 };
 

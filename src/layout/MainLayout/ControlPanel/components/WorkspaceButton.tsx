@@ -5,6 +5,7 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { useLocation } from "react-router-dom";
 import { privateAxios } from "@/utils/privateAxios.ts";
 import { useMutation } from "@tanstack/react-query";
 import { TrashIcon } from "@radix-ui/react-icons";
@@ -25,6 +26,7 @@ interface WorkspaceButtonProps {
 
 export function WorkspaceButton({ workspace }: WorkspaceButtonProps) {
   const queryClient = useQueryClient();
+  const { pathname } = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { mutate: deleteWorkspace } = useMutation({
