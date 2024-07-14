@@ -19,9 +19,14 @@ export function useQueryParams() {
     }
   }
 
+  function setQueryParams(params: setQueryParamsArgs[]) {
+    params.forEach((param) => setQueryParam(param));
+  }
+
   return {
     searchParams,
     setQueryParam,
     setSearchParams,
+    setQueryParams,
   };
 }

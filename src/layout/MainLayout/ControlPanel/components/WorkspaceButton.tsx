@@ -5,10 +5,9 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import { useLocation } from "react-router-dom";
 import { privateAxios } from "@/utils/privateAxios.ts";
 import { useMutation } from "@tanstack/react-query";
-import { TrashIcon } from "@radix-ui/react-icons";
+import { TrashIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/components/ui/use-toast.ts";
 import { TWorkspace } from "@/@types/api.types.ts";
@@ -19,6 +18,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip.tsx";
+import { useQueryParams } from "@/hooks/useQueryParams";
 
 interface WorkspaceButtonProps {
   workspace: TWorkspace;
@@ -26,8 +26,8 @@ interface WorkspaceButtonProps {
 
 export function WorkspaceButton({ workspace }: WorkspaceButtonProps) {
   const queryClient = useQueryClient();
-  const { pathname } = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { setQueryParams } = useQueryParams();
 
   const { mutate: deleteWorkspace } = useMutation({
     mutationKey: ["deleteWorkspace"],
@@ -68,6 +68,19 @@ export function WorkspaceButton({ workspace }: WorkspaceButtonProps) {
         </Tooltip>
       </ContextMenuTrigger>
       <ContextMenuContent>
+        <ContextMenuItem
+          disabled={workspace.default}
+          className="cursor-pointer"
+          onClick={() =>
+            setQueryParams([
+              { key: "modal", value: "workspace" },
+              { key: "update", value: workspace._id },
+            ])
+          }
+        >
+          <Pencil1Icon className="mr-1.5" />
+          Edit
+        </ContextMenuItem>
         <ContextMenuItem
           disabled={workspace.default}
           className="cursor-pointer"

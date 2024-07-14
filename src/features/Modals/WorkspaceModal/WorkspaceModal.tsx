@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
 import { ReloadIcon } from "@radix-ui/react-icons";
@@ -22,6 +23,8 @@ import { privateAxios } from "@/utils/privateAxios.ts";
 import { Separator } from "@/components/ui/separator.tsx";
 import { ColorPicker } from "@/components/custom/ColorPicker";
 
+import { useWorkspaces } from "@/hooks/useWorkspaces";
+
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "name must be at least 2 characters.",
@@ -29,17 +32,21 @@ const formSchema = z.object({
   color: z.string().optional(),
 });
 
-type CreateWorkspaceModalProps = {
+type WorkspaceModalProps = {
   open: boolean;
+  updateId: string | null;
   onOpenChange: (open: boolean) => void;
 };
 
-export function CreateWorkspaceModal({
+export function WorkspaceModal({
   open,
+  updateId,
   onOpenChange,
-}: CreateWorkspaceModalProps) {
+}: WorkspaceModalProps) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const [mode, setMode] = useState<"create" | "update">("create");
+
   const { mutate: createWorkspace, isPending } = useMutation({
     mutationKey: ["createWorkspace"],
     mutationFn: async (values: z.infer<typeof formSchema>) => {
@@ -60,6 +67,13 @@ export function CreateWorkspaceModal({
     },
   });
 
+  const { data: workspaces } = useWorkspaces();
+
+  const currentWorkspace = useMemo(() => {
+    if (!updateId) return undefined;
+    return workspaces?.find((workspace) => workspace._id === updateId);
+  }, [updateId, workspaces]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -71,6 +85,16 @@ export function CreateWorkspaceModal({
     createWorkspace(values);
   }
 
+  useEffect(() => {
+    if (currentWorkspace) {
+      form.reset({
+        name: currentWorkspace.name,
+        color: currentWorkspace.color,
+      });
+      setMode("update");
+    }
+  }, [currentWorkspace]);
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[625px] p-0 w-full">
@@ -78,7 +102,9 @@ export function CreateWorkspaceModal({
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="pt-4 px-4 space-y-4">
               <DialogHeader>
-                <DialogTitle>Create Workspace</DialogTitle>
+                <DialogTitle>
+                  {mode === "update" ? "Update Workspace" : "Create Workspace"}
+                </DialogTitle>
               </DialogHeader>
               <FormField
                 control={form.control}
@@ -114,7 +140,7 @@ export function CreateWorkspaceModal({
                 {isPending && (
                   <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Create
+                {mode === "update" ? "Update" : "Create"}
               </Button>
             </DialogFooter>
           </form>
