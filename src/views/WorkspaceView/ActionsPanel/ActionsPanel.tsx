@@ -10,6 +10,7 @@ import {
 
 export function ActionsPanel() {
   const { setQueryParam } = useQueryParams();
+
   return (
     <div className="rounded-lg border border-border border-solid p-3 flex justify-between items-center">
       actions panel

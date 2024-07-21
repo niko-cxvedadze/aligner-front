@@ -56,12 +56,5 @@ export const tasksColumns: ColumnDef<TTask>[] = [
       return formatDate(row.getValue("createdAt"), "standard");
     },
   },
-  {
-    accessorKey: "updatedAt",
-    header: "Updated At",
-    cell: ({ row }) => {
-      return formatDate(row.getValue("updatedAt"), "standard");
-    },
-  },
   { id: "actions", cell: ({ row }) => <DataTableRowActions row={row} /> },
 ];
